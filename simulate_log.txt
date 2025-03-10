@@ -1,0 +1,40 @@
+Liqi_msg: {"id": 1, "type": "MsgType.REQ", "method": ".lq.FastTest.authGame", "data": {"accountId": 17457800, "token": "7d7bbcc2-afd2-4d2d-86e5-ef1b02d7b316", "gameUuid": "250306-62115e73-392d-4789-8df2-955aeccd728d", "gift": "5e2c11c33060cbe6618fee8c481972179bffbd182ea77a072b6574c982e224c0", "session": "", "vs": 0}}
+==================================================
+Liqi_msg: {"id": 1, "type": "MsgType.RES", "method": ".lq.FastTest.authGame", "data": {"players": [{"accountId": 17457800, "avatarId": 400101, "nickname": "猫机", "level": {"id": 10101, "score": 18}, "character": {"charid": 200001, "exp": 200, "skin": 400101, "level": 0, "views": [], "isUpgraded": false, "extraEmoji": [], "rewardedLevel": []}, "level3": {"id": 20101, "score": 0}, "title": 0, "avatarFrame": 0, "verified": 0, "views": []}], "seatList": [11, 12, 17457800, 13], "gameConfig": {"category": 1, "mode": {"mode": 3, "ai": true, "detailRule": {"timeFixed": 5, "timeAdd": 20, "doraCount": 3, "shiduan": 1, "initPoint": 25000, "fandian": 30000, "bianjietishi": true, "aiLevel": 1, "fanfu": 1, "canJifei": false, "tianbianValue": 0, "liqibangValue": 0, "changbangValue": 0, "notingFafu1": 0, "notingFafu2": 0, "notingFafu3": 0, "haveLiujumanguan": false, "haveQieshangmanguan": false, "haveBiaoDora": false, "haveGangBiaoDora": false, "mingDoraImmediatelyOpen": false, "haveLiDora": false, "haveGangLiDora": false, "haveSifenglianda": false, "haveSigangsanle": false, "haveSijializhi": false, "haveJiuzhongjiupai": false, "haveSanjiahele": false, "haveToutiao": false, "haveHelelianzhuang": false, "haveHelezhongju": false, "haveTingpailianzhuang": false, "haveTingpaizhongju": false, "haveYifa": false, "haveNanruxiru": false, "jingsuanyuandian": 0, "shunweima2": 0, "shunweima3": 0, "shunweima4": 0, "haveZimosun": false, "disableMultiYukaman": false, "guyiMode": 0, "dora3Mode": 0, "beginOpenMode": 0, "jiuchaoMode": 0, "muyuMode": 0, "openHand": 0, "xuezhandaodi": 0, "huansanzhang": 0, "chuanma": 0, "revealDiscard": 0, "fieldSpellMode": 0, "zhanxing": 0, "tianmingMode": 0, "disableLeijiyiman": false, "disableDoubleYakuman": 0, "disableCompositeYakuman": 0, "enableShiti": 0, "enableNontsumoLiqi": 0, "disableDoubleWindFourFu": 0, "disableAngangGuoshi": 0, "enableRenhe": 0, "enableBaopaiExtendSettings": 0, "yongchangMode": 0}, "extendinfo": ""}, "meta": {"roomId": 53205, "modeId": 0, "contestUid": 0}}, "readyIdList": [11, 12, 13], "isGameStart": false}}
+==================================================
+Liqi_msg: {"id": 3, "type": "MsgType.REQ", "method": ".lq.FastTest.enterGame", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.NotifyPlayerLoadGameReady", "data": {"readyIdList": [11, 12, 17457800, 13]}}
+==================================================
+Liqi_msg: {"id": 3, "type": "MsgType.RES", "method": ".lq.FastTest.enterGame", "data": {"isEnd": false, "step": 0}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"name": "ActionMJStart", "step": 0, "data": {}}}
+==================================================
+Liqi_msg: {"id": 4, "type": "MsgType.REQ", "method": ".lq.FastTest.fetchGamePlayerState", "data": {}}
+==================================================
+Liqi_msg: {"id": 4, "type": "MsgType.RES", "method": ".lq.FastTest.fetchGamePlayerState", "data": {"stateList": ["READY", "READY", "READY", "READY"]}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 1, "name": "ActionNewRound", "data": {"tiles": ["1z", "2m", "7p", "4p", "1m", "1m", "5p", "5z", "2p", "7p", "7m", "6z", "4z"], "scores": [25000, 25000, 25000, 25000], "leftTileCount": 69, "doras": ["8p"], "opens": [{"seat": 0, "tiles": [], "count": []}, {"seat": 1, "tiles": [], "count": []}, {"seat": 2, "tiles": [], "count": []}, {"seat": 3, "tiles": [], "count": []}], "sha256": "7968a914e220187bb63a918f91423433329e95c5ce7a057ba873ce360c428255", "chang": 0, "ju": 0, "ben": 0, "dora": "", "liqibang": 0, "tingpais0": [], "tingpais1": [], "al": false, "md5": "", "juCount": 0, "fieldSpell": 0}}}
+==================================================
+Liqi_msg: {"id": 7, "type": "MsgType.REQ", "method": ".lq.FastTest.fetchGamePlayerState", "data": {}}
+==================================================
+Liqi_msg: {"id": 7, "type": "MsgType.RES", "method": ".lq.FastTest.fetchGamePlayerState", "data": {"stateList": ["READY", "READY", "READY", "READY"]}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 2, "name": "ActionDiscardTile", "data": {"tile": "9m", "seat": 0, "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 3, "name": "ActionDealTile", "data": {"seat": 1, "leftTileCount": 68, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 4, "name": "ActionDiscardTile", "data": {"seat": 1, "tile": "6z", "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 5, "name": "ActionDealTile", "data": {"seat": 2, "tile": "7s", "leftTileCount": 67, "operation": {"seat": 2, "operationList": [{"type": 1, "combination": [], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000}, "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": 11, "type": "MsgType.REQ", "method": ".lq.FastTest.inputOperation", "data": {"type": 1, "tile": "4z", "timeuse": 2, "index": 0, "cancelOperation": false, "moqie": false, "tileState": 0, "changeTiles": [], "tileStates": [], "gapType": 0}}
+==================================================
+Liqi_msg: {"id": 11, "type": "MsgType.RES", "method": ".lq.FastTest.inputOperation", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 6, "name": "ActionDiscardTile", "data": {"seat": 2, "tile": "4z", "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 7, "name": "ActionDealTile", "data": {"seat": 3, "leftTileCount": 66, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 8, "name": "ActionDiscardTile", "data": {"seat": 3, "tile": "4m", "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================

@@ -150,6 +150,14 @@ class LiqiProto:
         result = {'id': msg_id, 'type': msg_type,
                 'method': method_name, 'data': dict_obj}
         self.tot += 1
+
+        #dubug
+        # print("\n\nflow_msg:")
+        print(flow_msg)
+        # print("\n\nresult:")
+        print(result)
+        # print("\n\n\n")
+
         return result
     
     def parse_syncGame(self, liqi_data):

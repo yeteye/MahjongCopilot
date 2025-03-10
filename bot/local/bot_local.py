@@ -20,6 +20,7 @@ class BotMortalLocal(BotMjai):
         self.model_files = model_files
         self._engines:dict[GameMode, any] = {}
         for k,v in model_files.items():
+            # print(f"k:{k}")
             if not Path(v).exists() or not Path(v).is_file():
                 # test file exists
                 LOGGER.warning("Cannot find model file for mode %s:%s", k,v)
@@ -29,14 +30,14 @@ class BotMortalLocal(BotMjai):
                         self._engines[k] = get_engine(self.model_files[k])
                     except Exception as e:
                         LOGGER.warning("Cannot create engine for mode %s: %s", k, e, exc_info=True)
-                elif k == GameMode.MJ3P:
-                    # test import libraries for 3p
-                    try:
-                        import libriichi3p
-                        from bot.local.engine3p import get_engine as get_engine_3p
-                        self._engines[k] = get_engine_3p(self.model_files[k])
-                    except Exception as e: # pylint: disable=broad-except
-                        LOGGER.warning("Cannot create engine for mode %s: %s", k, e, exc_info=True)
+                # elif k == GameMode.MJ3P:
+                #     # test import libraries for 3p
+                #     try:
+                #         import libriichi3p
+                #         from bot.local.engine3p import get_engine as get_engine_3p
+                #         self._engines[k] = get_engine_3p(self.model_files[k])
+                #     except Exception as e: # pylint: disable=broad-except
+                #         LOGGER.warning("Cannot create engine for mode %s: %s", k, e, exc_info=True)
         self._supported_modes = list(self._engines.keys())
         if not self._supported_modes:
             raise LocalModelException("No valid model files found")

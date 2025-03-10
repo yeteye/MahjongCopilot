@@ -3,6 +3,7 @@ This module processes Majsoul game state and take liqi messages as inputs,
 and interfaces with AI bot to generate reactions.
 """
 import time
+import json
 
 from liqi import MsgType
 from liqi import LiqiProto, LiqiMethod, LiqiAction
@@ -64,7 +65,7 @@ class GameState:
         ### Game info
         self.account_id = 0                     # Majsoul account id
         self.mode_id:int = -1                   # game mode        
-        self.seat = 0                           # seat index
+        self.seat = 1                           # seat index
         #seat 0 is chiicha (起家; first dealer; first East)
         #1-2-3 then goes counter-clockwise        
         self.player_scores:list = None          # player scores        
@@ -137,12 +138,18 @@ class GameState:
             self.last_reaction_time = time_used
         self.is_bot_calculating = False
         return reaction
-    
+    def log_game_message(self,liqimsg):
+        with open("whole_game_log.txt", "a", encoding="utf-8") as f:
+            f.write("Liqi_msg: " + json.dumps(liqimsg, ensure_ascii=False, default=str) + "\n")
+            f.write("=" * 50 + "\n")  # 分隔符，表示新的回合
+
     def _input_inner(self, liqi_msg: dict) -> dict | None:        
         liqi_type = liqi_msg['type']
         liqi_method = liqi_msg['method']
         liqi_data = liqi_msg['data']
-        
+
+        # self.log_game_message(liqi_msg)
+
         # SyncGame
         if (liqi_method == LiqiMethod.syncGame or liqi_method == LiqiMethod.enterGame) and liqi_type == MsgType.RES:
             # syncGame: disconnect and reconnect
@@ -288,9 +295,12 @@ class GameState:
             self.player_scores = self.player_scores + [0]
         tehais_mjai = [['?']*13]*4        
         my_tehai_ms = liqi_data_data['tiles']
+
         self.kyoku_state.my_tehai = [mj_helper.cvt_ms2mjai(tile) for tile in my_tehai_ms]
+        # print(self.kyoku_state.my_tehai)
         self.kyoku_state.my_tehai = mj_helper.sort_mjai_tiles(self.kyoku_state.my_tehai)
-        
+        # print(self.kyoku_state.my_tehai)
+
         # For starting hand, if player is East, majsoul gives 14 tiles + no tsumohai
         # mjai accepts 13 tiles + following tsumohai event
         # In Majsoul, last one of sorted tiles is the tsumohai
@@ -361,6 +371,9 @@ class GameState:
         # LiqiAction.DealTile -> MJAI_TYPE.TSUMO
         if liqi_data_name == LiqiAction.DealTile:
             actor = liqi_data_data['seat']
+
+            # print("actor: ",actor)
+
             if liqi_data_data['tile'] == '':     # other player's tsumo
                 tile_mjai = '?'
             else:           # my tsumo
@@ -379,12 +392,26 @@ class GameState:
         elif liqi_data_name == LiqiAction.DiscardTile:
             actor = liqi_data_data['seat']
             tile_mjai = mj_helper.cvt_ms2mjai(liqi_data_data['tile'])
+
+            # print("liqi_data_data['tile'] ",liqi_data_data['tile'])
+            # print(f"mjai:{tile_mjai}")
+
             tsumogiri = liqi_data_data['moqie']
+
+            # print("self.seat ", self.seat)
+
             if actor == self.seat:  # update self hand info
                 if self.kyoku_state.my_tsumohai:                
                     self.kyoku_state.my_tehai.append(self.kyoku_state.my_tsumohai)
                     self.kyoku_state.my_tsumohai = None
+
+                # print(f"mytenhai: {self.kyoku_state.my_tehai}")
+                # print(f"mjai:{tile_mjai}")
+
                 self.kyoku_state.my_tehai.remove(tile_mjai)
+
+                # print(f"after-mytenhai: {self.kyoku_state.my_tehai}")
+
                 self.kyoku_state.my_tehai = mj_helper.sort_mjai_tiles(self.kyoku_state.my_tehai)            
             
             if liqi_data_data['isLiqi']:     # Player declares reach

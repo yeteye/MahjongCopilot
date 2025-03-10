@@ -1,0 +1,340 @@
+Liqi_msg: {"id": 1, "type": "MsgType.REQ", "method": ".lq.FastTest.authGame", "data": {"accountId": 17457800, "token": "ac0b157b-30b9-4c11-a1ca-9b17c7788296", "gameUuid": "250308-ee365457-91a4-4e49-8f1e-06bb78041e6c", "gift": "d5ef59065d955e3ee508da1dad49735fec3c4029acb77ba855fa9c2f6bf4f05b", "session": "", "vs": 0}}
+==================================================
+Liqi_msg: {"id": 1, "type": "MsgType.RES", "method": ".lq.FastTest.authGame", "data": {"players": [{"accountId": 17457800, "avatarId": 400101, "nickname": "猫机", "level": {"id": 10101, "score": 18}, "character": {"charid": 200001, "exp": 200, "skin": 400101, "level": 0, "views": [], "isUpgraded": false, "extraEmoji": [], "rewardedLevel": []}, "level3": {"id": 20101, "score": 0}, "title": 0, "avatarFrame": 0, "verified": 0, "views": []}], "seatList": [17457800, 13, 11, 12], "gameConfig": {"category": 1, "mode": {"mode": 3, "ai": true, "detailRule": {"timeFixed": 5, "timeAdd": 20, "doraCount": 3, "shiduan": 1, "initPoint": 25000, "fandian": 30000, "bianjietishi": true, "aiLevel": 1, "fanfu": 1, "canJifei": false, "tianbianValue": 0, "liqibangValue": 0, "changbangValue": 0, "notingFafu1": 0, "notingFafu2": 0, "notingFafu3": 0, "haveLiujumanguan": false, "haveQieshangmanguan": false, "haveBiaoDora": false, "haveGangBiaoDora": false, "mingDoraImmediatelyOpen": false, "haveLiDora": false, "haveGangLiDora": false, "haveSifenglianda": false, "haveSigangsanle": false, "haveSijializhi": false, "haveJiuzhongjiupai": false, "haveSanjiahele": false, "haveToutiao": false, "haveHelelianzhuang": false, "haveHelezhongju": false, "haveTingpailianzhuang": false, "haveTingpaizhongju": false, "haveYifa": false, "haveNanruxiru": false, "jingsuanyuandian": 0, "shunweima2": 0, "shunweima3": 0, "shunweima4": 0, "haveZimosun": false, "disableMultiYukaman": false, "guyiMode": 0, "dora3Mode": 0, "beginOpenMode": 0, "jiuchaoMode": 0, "muyuMode": 0, "openHand": 0, "xuezhandaodi": 0, "huansanzhang": 0, "chuanma": 0, "revealDiscard": 0, "fieldSpellMode": 0, "zhanxing": 0, "tianmingMode": 0, "disableLeijiyiman": false, "disableDoubleYakuman": 0, "disableCompositeYakuman": 0, "enableShiti": 0, "enableNontsumoLiqi": 0, "disableDoubleWindFourFu": 0, "disableAngangGuoshi": 0, "enableRenhe": 0, "enableBaopaiExtendSettings": 0, "yongchangMode": 0}, "extendinfo": ""}, "meta": {"roomId": 26238, "modeId": 0, "contestUid": 0}}, "readyIdList": [13, 11, 12], "isGameStart": false}}
+==================================================
+Liqi_msg: {"id": 3, "type": "MsgType.REQ", "method": ".lq.FastTest.enterGame", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.NotifyPlayerLoadGameReady", "data": {"readyIdList": [17457800, 13, 11, 12]}}
+==================================================
+Liqi_msg: {"id": 3, "type": "MsgType.RES", "method": ".lq.FastTest.enterGame", "data": {"isEnd": false, "step": 0}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"name": "ActionMJStart", "step": 0, "data": {}}}
+==================================================
+Liqi_msg: {"id": 4, "type": "MsgType.REQ", "method": ".lq.FastTest.fetchGamePlayerState", "data": {}}
+==================================================
+Liqi_msg: {"id": 4, "type": "MsgType.RES", "method": ".lq.FastTest.fetchGamePlayerState", "data": {"stateList": ["READY", "READY", "READY", "READY"]}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 1, "name": "ActionNewRound", "data": {"tiles": ["3z", "1m", "4p", "4p", "6m", "7s", "9p", "4s", "3s", "8m", "7m", "2z", "4z", "1z"], "scores": [25000, 25000, 25000, 25000], "operation": {"operationList": [{"type": 1, "combination": [], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 8000, "seat": 0}, "leftTileCount": 69, "doras": ["6m"], "opens": [{"seat": 0, "tiles": [], "count": []}, {"seat": 1, "tiles": [], "count": []}, {"seat": 2, "tiles": [], "count": []}, {"seat": 3, "tiles": [], "count": []}], "sha256": "fe1685394a1f62bbb731db214118a8907a5c30c6bbc195a971b12105815883e0", "chang": 0, "ju": 0, "ben": 0, "dora": "", "liqibang": 0, "tingpais0": [], "tingpais1": [], "al": false, "md5": "", "juCount": 0, "fieldSpell": 0}}}
+==================================================
+Liqi_msg: {"id": 8, "type": "MsgType.REQ", "method": ".lq.FastTest.fetchGamePlayerState", "data": {}}
+==================================================
+Liqi_msg: {"id": 8, "type": "MsgType.RES", "method": ".lq.FastTest.fetchGamePlayerState", "data": {"stateList": ["READY", "READY", "READY", "READY"]}}
+==================================================
+Liqi_msg: {"id": 11, "type": "MsgType.REQ", "method": ".lq.FastTest.inputOperation", "data": {"type": 1, "tile": "2z", "timeuse": 4, "index": 0, "cancelOperation": false, "moqie": false, "tileState": 0, "changeTiles": [], "tileStates": [], "gapType": 0}}
+==================================================
+Liqi_msg: {"id": 11, "type": "MsgType.RES", "method": ".lq.FastTest.inputOperation", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 2, "name": "ActionDiscardTile", "data": {"tile": "2z", "seat": 0, "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 3, "name": "ActionDealTile", "data": {"seat": 1, "leftTileCount": 68, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 4, "name": "ActionDiscardTile", "data": {"seat": 1, "tile": "3z", "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 5, "name": "ActionDealTile", "data": {"seat": 2, "leftTileCount": 67, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 6, "name": "ActionDiscardTile", "data": {"seat": 2, "tile": "2z", "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 7, "name": "ActionDealTile", "data": {"seat": 3, "leftTileCount": 66, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 8, "name": "ActionDiscardTile", "data": {"seat": 3, "tile": "6z", "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 9, "name": "ActionDealTile", "data": {"tile": "9s", "leftTileCount": 65, "operation": {"operationList": [{"type": 1, "combination": [], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "seat": 0, "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": 15, "type": "MsgType.REQ", "method": ".lq.FastTest.inputOperation", "data": {"type": 1, "tile": "3z", "timeuse": 2, "index": 0, "cancelOperation": false, "moqie": false, "tileState": 0, "changeTiles": [], "tileStates": [], "gapType": 0}}
+==================================================
+Liqi_msg: {"id": 15, "type": "MsgType.RES", "method": ".lq.FastTest.inputOperation", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 10, "name": "ActionDiscardTile", "data": {"tile": "3z", "seat": 0, "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 11, "name": "ActionDealTile", "data": {"seat": 1, "leftTileCount": 64, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 12, "name": "ActionDiscardTile", "data": {"seat": 1, "tile": "4z", "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 13, "name": "ActionDealTile", "data": {"seat": 2, "leftTileCount": 63, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 14, "name": "ActionDiscardTile", "data": {"seat": 2, "tile": "4z", "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 15, "name": "ActionDealTile", "data": {"seat": 3, "leftTileCount": 62, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 16, "name": "ActionDiscardTile", "data": {"seat": 3, "tile": "2s", "operation": {"operationList": [{"type": 2, "combination": ["3s|4s"], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": 19, "type": "MsgType.REQ", "method": ".lq.FastTest.inputChiPengGang", "data": {"cancelOperation": true, "timeuse": 2, "type": 0, "index": 0}}
+==================================================
+Liqi_msg: {"id": 19, "type": "MsgType.RES", "method": ".lq.FastTest.inputChiPengGang", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 17, "name": "ActionDealTile", "data": {"tile": "3z", "leftTileCount": 61, "operation": {"operationList": [{"type": 1, "combination": [], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "seat": 0, "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": 21, "type": "MsgType.REQ", "method": ".lq.FastTest.inputOperation", "data": {"type": 1, "tile": "3z", "moqie": true, "timeuse": 2, "index": 0, "cancelOperation": false, "tileState": 0, "changeTiles": [], "tileStates": [], "gapType": 0}}
+==================================================
+Liqi_msg: {"id": 21, "type": "MsgType.RES", "method": ".lq.FastTest.inputOperation", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 18, "name": "ActionDiscardTile", "data": {"tile": "3z", "moqie": true, "seat": 0, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 19, "name": "ActionDealTile", "data": {"seat": 1, "leftTileCount": 60, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 20, "name": "ActionDiscardTile", "data": {"seat": 1, "tile": "1z", "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 21, "name": "ActionDealTile", "data": {"seat": 2, "leftTileCount": 59, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 22, "name": "ActionDiscardTile", "data": {"seat": 2, "tile": "7p", "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 23, "name": "ActionDealTile", "data": {"seat": 3, "leftTileCount": 58, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 24, "name": "ActionDiscardTile", "data": {"seat": 3, "tile": "9p", "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 25, "name": "ActionDealTile", "data": {"tile": "3p", "leftTileCount": 57, "operation": {"operationList": [{"type": 1, "combination": [], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "seat": 0, "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": 25, "type": "MsgType.REQ", "method": ".lq.FastTest.inputOperation", "data": {"type": 1, "tile": "4z", "timeuse": 2, "index": 0, "cancelOperation": false, "moqie": false, "tileState": 0, "changeTiles": [], "tileStates": [], "gapType": 0}}
+==================================================
+Liqi_msg: {"id": 25, "type": "MsgType.RES", "method": ".lq.FastTest.inputOperation", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 26, "name": "ActionDiscardTile", "data": {"tile": "4z", "seat": 0, "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 27, "name": "ActionDealTile", "data": {"seat": 1, "leftTileCount": 56, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 28, "name": "ActionDiscardTile", "data": {"seat": 1, "tile": "9s", "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 29, "name": "ActionDealTile", "data": {"seat": 2, "leftTileCount": 55, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 30, "name": "ActionDiscardTile", "data": {"seat": 2, "tile": "5z", "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 31, "name": "ActionDealTile", "data": {"seat": 3, "leftTileCount": 54, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 32, "name": "ActionDiscardTile", "data": {"seat": 3, "tile": "9m", "operation": {"operationList": [{"type": 2, "combination": ["7m|8m"], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": 29, "type": "MsgType.REQ", "method": ".lq.FastTest.inputChiPengGang", "data": {"cancelOperation": true, "timeuse": 1, "type": 0, "index": 0}}
+==================================================
+Liqi_msg: {"id": 29, "type": "MsgType.RES", "method": ".lq.FastTest.inputChiPengGang", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 33, "name": "ActionDealTile", "data": {"tile": "8m", "leftTileCount": 53, "operation": {"operationList": [{"type": 1, "combination": [], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "seat": 0, "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": 31, "type": "MsgType.REQ", "method": ".lq.FastTest.inputOperation", "data": {"type": 1, "tile": "1m", "timeuse": 2, "index": 0, "cancelOperation": false, "moqie": false, "tileState": 0, "changeTiles": [], "tileStates": [], "gapType": 0}}
+==================================================
+Liqi_msg: {"id": 31, "type": "MsgType.RES", "method": ".lq.FastTest.inputOperation", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 34, "name": "ActionDiscardTile", "data": {"tile": "1m", "seat": 0, "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 35, "name": "ActionDealTile", "data": {"seat": 1, "leftTileCount": 52, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 36, "name": "ActionDiscardTile", "data": {"seat": 1, "tile": "1m", "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 37, "name": "ActionDealTile", "data": {"seat": 2, "leftTileCount": 51, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 38, "name": "ActionDiscardTile", "data": {"seat": 2, "tile": "1z", "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 39, "name": "ActionDealTile", "data": {"seat": 3, "leftTileCount": 50, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 40, "name": "ActionDiscardTile", "data": {"seat": 3, "tile": "0m", "operation": {"operationList": [{"type": 2, "combination": ["6m|7m"], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": 35, "type": "MsgType.REQ", "method": ".lq.FastTest.inputChiPengGang", "data": {"cancelOperation": true, "timeuse": 2, "type": 0, "index": 0}}
+==================================================
+Liqi_msg: {"id": 35, "type": "MsgType.RES", "method": ".lq.FastTest.inputChiPengGang", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 41, "name": "ActionDealTile", "data": {"tile": "7p", "leftTileCount": 49, "operation": {"operationList": [{"type": 1, "combination": [], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "seat": 0, "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": 38, "type": "MsgType.REQ", "method": ".lq.FastTest.inputOperation", "data": {"type": 1, "tile": "1z", "timeuse": 2, "index": 0, "cancelOperation": false, "moqie": false, "tileState": 0, "changeTiles": [], "tileStates": [], "gapType": 0}}
+==================================================
+Liqi_msg: {"id": 38, "type": "MsgType.RES", "method": ".lq.FastTest.inputOperation", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 42, "name": "ActionDiscardTile", "data": {"tile": "1z", "seat": 0, "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 43, "name": "ActionDealTile", "data": {"seat": 1, "leftTileCount": 48, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 44, "name": "ActionDiscardTile", "data": {"seat": 1, "tile": "1s", "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 45, "name": "ActionDealTile", "data": {"seat": 2, "leftTileCount": 47, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 46, "name": "ActionDiscardTile", "data": {"seat": 2, "tile": "6s", "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 47, "name": "ActionDealTile", "data": {"seat": 3, "leftTileCount": 46, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 48, "name": "ActionDiscardTile", "data": {"seat": 3, "tile": "5z", "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 49, "name": "ActionDealTile", "data": {"tile": "6z", "leftTileCount": 45, "operation": {"operationList": [{"type": 1, "combination": [], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "seat": 0, "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": 41, "type": "MsgType.REQ", "method": ".lq.FastTest.inputOperation", "data": {"type": 1, "tile": "6z", "moqie": true, "timeuse": 1, "index": 0, "cancelOperation": false, "tileState": 0, "changeTiles": [], "tileStates": [], "gapType": 0}}
+==================================================
+Liqi_msg: {"id": 41, "type": "MsgType.RES", "method": ".lq.FastTest.inputOperation", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 50, "name": "ActionDiscardTile", "data": {"tile": "6z", "moqie": true, "seat": 0, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 51, "name": "ActionDealTile", "data": {"seat": 1, "leftTileCount": 44, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 52, "name": "ActionDiscardTile", "data": {"seat": 1, "tile": "7z", "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 53, "name": "ActionDealTile", "data": {"seat": 2, "leftTileCount": 43, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 54, "name": "ActionDiscardTile", "data": {"seat": 2, "tile": "6s", "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 55, "name": "ActionDealTile", "data": {"seat": 3, "leftTileCount": 42, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 56, "name": "ActionDiscardTile", "data": {"seat": 3, "tile": "7z", "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 57, "name": "ActionDealTile", "data": {"tile": "7m", "leftTileCount": 41, "operation": {"operationList": [{"type": 1, "combination": [], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "seat": 0, "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": 47, "type": "MsgType.REQ", "method": ".lq.FastTest.inputOperation", "data": {"type": 1, "tile": "3p", "timeuse": 3, "index": 0, "cancelOperation": false, "moqie": false, "tileState": 0, "changeTiles": [], "tileStates": [], "gapType": 0}}
+==================================================
+Liqi_msg: {"id": 47, "type": "MsgType.RES", "method": ".lq.FastTest.inputOperation", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 58, "name": "ActionDiscardTile", "data": {"tile": "3p", "seat": 0, "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 59, "name": "ActionDealTile", "data": {"seat": 1, "leftTileCount": 40, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 60, "name": "ActionDiscardTile", "data": {"seat": 1, "tile": "1s", "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 61, "name": "ActionDealTile", "data": {"seat": 2, "leftTileCount": 39, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 62, "name": "ActionDiscardTile", "data": {"seat": 2, "tile": "4z", "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 63, "name": "ActionDealTile", "data": {"seat": 3, "leftTileCount": 38, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 64, "name": "ActionDiscardTile", "data": {"seat": 3, "tile": "0p", "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 65, "name": "ActionDealTile", "data": {"tile": "1p", "leftTileCount": 37, "operation": {"operationList": [{"type": 1, "combination": [], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "seat": 0, "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": 51, "type": "MsgType.REQ", "method": ".lq.FastTest.inputOperation", "data": {"type": 1, "tile": "1p", "moqie": true, "timeuse": 2, "index": 0, "cancelOperation": false, "tileState": 0, "changeTiles": [], "tileStates": [], "gapType": 0}}
+==================================================
+Liqi_msg: {"id": 51, "type": "MsgType.RES", "method": ".lq.FastTest.inputOperation", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 66, "name": "ActionDiscardTile", "data": {"tile": "1p", "moqie": true, "seat": 0, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 67, "name": "ActionDealTile", "data": {"seat": 1, "leftTileCount": 36, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 68, "name": "ActionDiscardTile", "data": {"seat": 1, "tile": "9s", "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 69, "name": "ActionDealTile", "data": {"seat": 2, "leftTileCount": 35, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 70, "name": "ActionDiscardTile", "data": {"seat": 2, "tile": "6z", "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 71, "name": "ActionDealTile", "data": {"seat": 3, "leftTileCount": 34, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 72, "name": "ActionDiscardTile", "data": {"seat": 3, "tile": "8m", "operation": {"operationList": [{"type": 2, "combination": ["6m|7m"], "changeTiles": [], "changeTileStates": [], "gapType": 0}, {"type": 3, "combination": ["8m|8m"], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": 55, "type": "MsgType.REQ", "method": ".lq.FastTest.inputChiPengGang", "data": {"cancelOperation": true, "timeuse": 2, "type": 0, "index": 0}}
+==================================================
+Liqi_msg: {"id": 55, "type": "MsgType.RES", "method": ".lq.FastTest.inputChiPengGang", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 73, "name": "ActionDealTile", "data": {"tile": "6s", "leftTileCount": 33, "operation": {"operationList": [{"type": 1, "combination": [], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "seat": 0, "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": 58, "type": "MsgType.REQ", "method": ".lq.FastTest.inputOperation", "data": {"type": 1, "tile": "9s", "timeuse": 2, "index": 0, "cancelOperation": false, "moqie": false, "tileState": 0, "changeTiles": [], "tileStates": [], "gapType": 0}}
+==================================================
+Liqi_msg: {"id": 58, "type": "MsgType.RES", "method": ".lq.FastTest.inputOperation", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 74, "name": "ActionDiscardTile", "data": {"tile": "9s", "seat": 0, "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 75, "name": "ActionDealTile", "data": {"seat": 1, "leftTileCount": 32, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 76, "name": "ActionDiscardTile", "data": {"seat": 1, "tile": "8m", "operation": {"operationList": [{"type": 3, "combination": ["8m|8m"], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": 60, "type": "MsgType.REQ", "method": ".lq.FastTest.inputChiPengGang", "data": {"cancelOperation": true, "timeuse": 1, "type": 0, "index": 0}}
+==================================================
+Liqi_msg: {"id": 60, "type": "MsgType.RES", "method": ".lq.FastTest.inputChiPengGang", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 77, "name": "ActionDealTile", "data": {"seat": 2, "leftTileCount": 31, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 78, "name": "ActionDiscardTile", "data": {"seat": 2, "tile": "9m", "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 79, "name": "ActionDealTile", "data": {"seat": 3, "leftTileCount": 30, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 80, "name": "ActionDiscardTile", "data": {"seat": 3, "tile": "3z", "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 81, "name": "ActionDealTile", "data": {"tile": "4m", "leftTileCount": 29, "operation": {"operationList": [{"type": 1, "combination": [], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "seat": 0, "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": 64, "type": "MsgType.REQ", "method": ".lq.FastTest.inputOperation", "data": {"type": 1, "tile": "4m", "moqie": true, "timeuse": 2, "index": 0, "cancelOperation": false, "tileState": 0, "changeTiles": [], "tileStates": [], "gapType": 0}}
+==================================================
+Liqi_msg: {"id": 64, "type": "MsgType.RES", "method": ".lq.FastTest.inputOperation", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 82, "name": "ActionDiscardTile", "data": {"tile": "4m", "moqie": true, "seat": 0, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 83, "name": "ActionDealTile", "data": {"seat": 1, "leftTileCount": 28, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 84, "name": "ActionDiscardTile", "data": {"seat": 1, "tile": "1m", "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 85, "name": "ActionDealTile", "data": {"seat": 2, "leftTileCount": 27, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 86, "name": "ActionDiscardTile", "data": {"seat": 2, "tile": "1s", "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 87, "name": "ActionDealTile", "data": {"seat": 3, "leftTileCount": 26, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 88, "name": "ActionDiscardTile", "data": {"seat": 3, "tile": "8p", "operation": {"operationList": [{"type": 2, "combination": ["7p|9p"], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": 67, "type": "MsgType.REQ", "method": ".lq.FastTest.inputChiPengGang", "data": {"cancelOperation": true, "timeuse": 1, "type": 0, "index": 0}}
+==================================================
+Liqi_msg: {"id": 67, "type": "MsgType.RES", "method": ".lq.FastTest.inputChiPengGang", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 89, "name": "ActionDealTile", "data": {"tile": "6p", "leftTileCount": 25, "operation": {"operationList": [{"type": 1, "combination": [], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "seat": 0, "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": 70, "type": "MsgType.REQ", "method": ".lq.FastTest.inputOperation", "data": {"type": 1, "tile": "9p", "timeuse": 2, "index": 0, "cancelOperation": false, "moqie": false, "tileState": 0, "changeTiles": [], "tileStates": [], "gapType": 0}}
+==================================================
+Liqi_msg: {"id": 70, "type": "MsgType.RES", "method": ".lq.FastTest.inputOperation", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 90, "name": "ActionDiscardTile", "data": {"tile": "9p", "seat": 0, "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 91, "name": "ActionDealTile", "data": {"seat": 1, "leftTileCount": 24, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 92, "name": "ActionDiscardTile", "data": {"seat": 1, "tile": "1p", "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 93, "name": "ActionDealTile", "data": {"seat": 2, "leftTileCount": 23, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 94, "name": "ActionDiscardTile", "data": {"seat": 2, "tile": "5m", "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 95, "name": "ActionDealTile", "data": {"seat": 3, "leftTileCount": 22, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 96, "name": "ActionDiscardTile", "data": {"seat": 3, "tile": "6m", "operation": {"operationList": [{"type": 2, "combination": ["7m|8m"], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": 74, "type": "MsgType.REQ", "method": ".lq.FastTest.inputChiPengGang", "data": {"type": 2, "timeuse": 2, "index": 0, "cancelOperation": false}}
+==================================================
+Liqi_msg: {"id": 74, "type": "MsgType.RES", "method": ".lq.FastTest.inputChiPengGang", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 97, "name": "ActionChiPengGang", "data": {"tiles": ["7m", "8m", "6m"], "froms": [0, 0, 3], "operation": {"operationList": [{"type": 1, "combination": ["6m", "9m"], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "tileStates": [0, 0], "seat": 0, "type": 0, "zhenting": false, "tingpais": [], "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": 76, "type": "MsgType.REQ", "method": ".lq.FastTest.inputOperation", "data": {"type": 1, "tile": "4s", "timeuse": 2, "index": 0, "cancelOperation": false, "moqie": false, "tileState": 0, "changeTiles": [], "tileStates": [], "gapType": 0}}
+==================================================
+Liqi_msg: {"id": 76, "type": "MsgType.RES", "method": ".lq.FastTest.inputOperation", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 98, "name": "ActionDiscardTile", "data": {"tile": "4s", "seat": 0, "isLiqi": false, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 99, "name": "ActionDealTile", "data": {"seat": 1, "leftTileCount": 21, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 100, "name": "ActionDiscardTile", "data": {"seat": 1, "tile": "8s", "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 101, "name": "ActionDealTile", "data": {"seat": 2, "leftTileCount": 20, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 102, "name": "ActionDiscardTile", "data": {"seat": 2, "tile": "2m", "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 103, "name": "ActionDealTile", "data": {"seat": 3, "leftTileCount": 19, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 104, "name": "ActionDiscardTile", "data": {"seat": 3, "tile": "3m", "isLiqi": true, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 105, "name": "ActionDealTile", "data": {"tile": "7m", "leftTileCount": 18, "operation": {"operationList": [{"type": 1, "combination": [], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "liqi": {"seat": 3, "score": 24000, "liqibang": 1, "failed": false}, "seat": 0, "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": 80, "type": "MsgType.REQ", "method": ".lq.FastTest.inputOperation", "data": {"type": 1, "tile": "7m", "moqie": true, "timeuse": 2, "index": 0, "cancelOperation": false, "tileState": 0, "changeTiles": [], "tileStates": [], "gapType": 0}}
+==================================================
+Liqi_msg: {"id": 80, "type": "MsgType.RES", "method": ".lq.FastTest.inputOperation", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 106, "name": "ActionDiscardTile", "data": {"tile": "7m", "moqie": true, "seat": 0, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 107, "name": "ActionDealTile", "data": {"seat": 1, "leftTileCount": 17, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 108, "name": "ActionDiscardTile", "data": {"seat": 1, "tile": "1m", "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 109, "name": "ActionDealTile", "data": {"seat": 2, "leftTileCount": 16, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 110, "name": "ActionDiscardTile", "data": {"seat": 2, "tile": "7m", "isLiqi": true, "moqie": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 111, "name": "ActionDealTile", "data": {"seat": 3, "leftTileCount": 15, "liqi": {"seat": 2, "score": 24000, "liqibang": 2, "failed": false}, "tile": "", "doras": [], "zhenting": false, "tingpais": [], "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 112, "name": "ActionDiscardTile", "data": {"seat": 3, "tile": "6p", "moqie": true, "isLiqi": false, "zhenting": false, "tingpais": [], "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 113, "name": "ActionDealTile", "data": {"tile": "8s", "leftTileCount": 14, "operation": {"operationList": [{"type": 1, "combination": [], "changeTiles": [], "changeTileStates": [], "gapType": 0}], "timeAdd": 20000, "timeFixed": 5000, "seat": 0}, "tingpais": [{"tile": "3s", "infos": [{"tile": "5p", "haveyi": true, "count": 1, "fu": 30, "biaoDoraCount": 2, "countZimo": 1, "fuZimo": 30, "yiman": false, "yimanZimo": false}, {"tile": "8p", "haveyi": true, "count": 2, "fu": 30, "biaoDoraCount": 2, "countZimo": 2, "fuZimo": 30, "yiman": false, "yimanZimo": false}], "zhenting": false}], "seat": 0, "doras": [], "zhenting": false, "tileState": 0, "tileIndex": 0}}}
+==================================================
+Liqi_msg: {"id": 85, "type": "MsgType.REQ", "method": ".lq.FastTest.inputOperation", "data": {"type": 1, "tile": "3s", "timeuse": 3, "index": 0, "cancelOperation": false, "moqie": false, "tileState": 0, "changeTiles": [], "tileStates": [], "gapType": 0}}
+==================================================
+Liqi_msg: {"id": 85, "type": "MsgType.RES", "method": ".lq.FastTest.inputOperation", "data": {}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 114, "name": "ActionDiscardTile", "data": {"tile": "3s", "tingpais": [{"tile": "5p", "haveyi": true, "count": 1, "fu": 30, "biaoDoraCount": 2, "countZimo": 1, "fuZimo": 30, "yiman": false, "yimanZimo": false}, {"tile": "8p", "haveyi": true, "count": 2, "fu": 30, "biaoDoraCount": 2, "countZimo": 2, "fuZimo": 30, "yiman": false, "yimanZimo": false}], "seat": 0, "isLiqi": false, "moqie": false, "zhenting": false, "doras": [], "isWliqi": false, "tileState": 0, "revealed": false, "scores": [], "liqibang": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 115, "name": "ActionHule", "data": {"hules": [{"hand": ["1p", "2p", "3p", "7p", "8p", "9p", "3s", "3s", "0s", "5s", "5s", "7s", "7s"], "huTile": "3s", "seat": 2, "liqi": true, "doras": ["6m"], "liDoras": ["4p"], "count": 3, "fans": [{"val": 1, "id": 2, "name": ""}, {"val": 1, "id": 30, "name": ""}, {"val": 1, "id": 32, "name": ""}, {"id": 33, "name": "", "val": 0}], "fu": 40, "pointRong": 5200, "pointZimoQin": 2600, "pointZimoXian": 1300, "pointSum": 5200, "dadian": 5200, "ming": [], "zimo": false, "qinjia": false, "yiman": false, "title": "", "titleId": 0, "baopai": 0, "baopaiSeats": [], "lines": [], "tianmingBonus": 0}], "oldScores": [25000, 25000, 24000, 24000], "deltaScores": [-5200, 0, 7200, 0], "scores": [19800, 25000, 31200, 24000], "waitTimeout": 0, "doras": [], "baopai": 0}}}
+==================================================
+Liqi_msg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.NotifyGameEndResult", "data": {"result": {"players": [{"seat": 2, "totalPoint": 21200, "partPoint1": 31200, "partPoint2": 0, "gradingScore": 0, "gold": 0}, {"seat": 1, "totalPoint": 5000, "partPoint1": 25000, "partPoint2": 0, "gradingScore": 0, "gold": 0}, {"seat": 3, "totalPoint": -6000, "partPoint1": 24000, "partPoint2": 0, "gradingScore": 0, "gold": 0}, {"totalPoint": -20200, "partPoint1": 19800, "seat": 0, "partPoint2": 0, "gradingScore": 0, "gold": 0}]}}}
+==================================================

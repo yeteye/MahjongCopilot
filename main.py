@@ -27,6 +27,7 @@ def main():
     """ Main entry point """
     LogHelper.config_logging()
     setting = Settings()
+    print(setting)
     # utils.set_dpi_awareness()
     utils.prevent_sleep()
     bot_manager = BotManager(setting)

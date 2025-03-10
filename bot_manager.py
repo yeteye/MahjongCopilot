@@ -7,6 +7,7 @@ The BotManager class is run in a separate thread, and provide interface methods 
 import time
 import queue
 import threading
+import json
 
 from game.browser import GameBrowser
 from game.game_state import GameState
@@ -329,11 +330,23 @@ class BotManager:
         
         if not self.game_exception:     # skip on game error
             self.automation.decide_lobby_action()
-            
-        
+
+    def log_game_message(self,liqimsg, reaction):
+        """ 将 liqimsg 和 reaction 记录到 game_log.txt 文件 """
+        with open("new_game_log.txt", "a", encoding="utf-8") as f:
+            f.write("LiqiMsg: " + json.dumps(liqimsg, ensure_ascii=False, default=str) + "\n")
+            f.write("Reaction: " + json.dumps(reaction, ensure_ascii=False, default=str) + "\n")
+            f.write("=" * 50 + "\n")  # 分隔符，表示新的回合
+
+    def log_certain_message(self, msg):
+        with open("AllLiqi_log.txt", "a", encoding="utf-8") as f:
+            f.write("Msg: " + json.dumps(msg, ensure_ascii=False, default=str) + "\n")
+            f.write("=" * 50 + "\n")  # 分隔符，表示新的回合
     def _process_msg(self, msg:mitm.WSMessage):
         """ process websocket message from mitm server"""
-        
+
+        # self.log_certain_message(msg)
+
         if msg.type == mitm.WsType.START:
             LOGGER.debug("Websocket Flow started: %s", msg.flow_id)
             
@@ -353,6 +366,7 @@ class BotManager:
             # process ws message
             try:
                 liqimsg = self.liqi_parser.parse(msg.content)
+                # self.log_certain_message(liqimsg)
             except Exception as e:
                 LOGGER.warning("Failed to parse liqi msg: %s\nError: %s", msg.content, e)
                 return
@@ -393,6 +407,10 @@ class BotManager:
                 # Feed msg to game_state for processing with AI bot
                 LOGGER.debug('Game msg: %s', str(liqimsg))
                 reaction = self.game_state.input(liqimsg)
+                LOGGER.debug('REACT msg: %s', str(reaction))
+
+                self.log_game_message(liqimsg, reaction)
+
                 if reaction:
                     self._do_automation(reaction)
                 else:
@@ -407,7 +425,71 @@ class BotManager:
 
             else:
                 LOGGER.debug('Other msg (ignored): %s', liqimsg)
-                
+    def my_api(self,liqimsg:dict):
+        LOGGER.debug('Game msg: %s', str(liqimsg))
+        reaction = self.game_state.input(liqimsg)
+        LOGGER.debug('REACT msg: %s', str(reaction))
+        return reaction
+    def my_api2(self, liqimsg: dict):
+        """
+        改进后的 my_api 根据 liqi_msg 的 type 和 method 判断是否调用 game_state.input，
+        并返回 reaction（如果有），否则直接返回 None。
+        """
+        # 提取关键字段
+
+        liqi_type = liqimsg.get("type")
+        liqi_method = liqimsg.get("method")
+        liqi_data = liqimsg.get("data", {})
+
+        # 如果消息方法在忽略列表中，直接返回 None
+        if liqi_method in METHODS_TO_IGNORE:
+            LOGGER.debug("my_api: Ignoring liqi_msg with method %s", liqi_method)
+            return None
+
+
+        # 处理认证消息 authGame
+        if liqi_method == liqi.LiqiMethod.authGame:
+            if liqi_type == liqi.MsgType.REQ:
+                # 处理请求消息：记录 accountId
+                self.game_state.account_id = liqi_data.get("accountId")
+                LOGGER.debug("my_api: Processing authGame REQ: %s", liqimsg)
+                # 调用 input 进行处理（通常返回 None）
+                return self.game_state.input(liqimsg)
+            elif liqi_type == liqi.MsgType.RES:
+                LOGGER.debug("my_api: Processing authGame RES: %s", liqimsg)
+                # 返回 ms_auth_game 的 reaction
+                return self.game_state.input(liqimsg)
+            else:
+                print("my_api: Unexpected authGame message type: %s", liqi_type)
+                return None
+
+        # 处理进入游戏相关消息：enterGame、finishSyncGame、fetchGamePlayerState
+        elif liqi_method in [liqi.LiqiMethod.enterGame,
+                             liqi.LiqiMethod.finishSyncGame,
+                             liqi.LiqiMethod.fetchGamePlayerState]:
+            LOGGER.debug("my_api: Processing %s: %s", liqi_method, liqimsg)
+            return self.game_state.input(liqimsg)
+
+        # 处理同步消息：syncGame、等
+        elif liqi_method == liqi.LiqiMethod.syncGame:
+            LOGGER.debug("my_api: Processing syncGame: %s", liqimsg)
+            return self.game_state.input(liqimsg)
+
+        # 处理游戏动作消息（ActionPrototype）
+        elif liqi_method == liqi.LiqiMethod.ActionPrototype:
+            LOGGER.debug("my_api: Processing ActionPrototype: %s", liqimsg)
+            return self.game_state.input(liqimsg)
+
+        # 处理结束局或游戏终止等消息
+        elif liqi_method in [liqi.LiqiMethod.NotifyGameEndResult, liqi.LiqiMethod.NotifyGameTerminate]:
+            LOGGER.debug("my_api: Processing %s: %s", liqi_method, liqimsg)
+            return self.game_state.input(liqimsg)
+
+        else:
+            # 其他未处理的消息，直接记录日志并返回 None
+            LOGGER.warning("my_api: Unhandled liqi_msg: %s", liqimsg)
+            return None
+
     def _process_idle_automation(self, liqimsg:dict):
         """ do some idle action based on liqi msg"""
         liqi_method = liqimsg['method']
