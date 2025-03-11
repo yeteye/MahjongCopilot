@@ -122,11 +122,11 @@ class BotMjai(Bot):
             
         str_input = json.dumps(input_msg)
 
-        print(f"\n\nstr_input:\n{str_input}\n\n")
+        # print(f"\n\nstr_input:\n{str_input}\n\n")
 
         react_str = self.mjai_bot.react(str_input)
 
-        print(f"\n\nreact_str:\n{react_str}\n\n")
+        # print(f"\n\nreact_str:\n{react_str}\n\n")
 
         if react_str is None:
             return None

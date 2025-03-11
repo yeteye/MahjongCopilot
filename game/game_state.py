@@ -65,28 +65,28 @@ class GameState:
         ### Game info
         self.account_id = 0                     # Majsoul account id
         self.mode_id:int = -1                   # game mode        
-        self.seat = 1                           # seat index
+        self.seat = 0                           # seat index
         #seat 0 is chiicha (起家; first dealer; first East)
-        #1-2-3 then goes counter-clockwise        
-        self.player_scores:list = None          # player scores        
-        self.kyoku_state:KyokuState = KyokuState()  # kyoku info - cleared every newround        
-        
+        #1-2-3 then goes counter-clockwise
+        self.player_scores:list = None          # player scores
+        self.kyoku_state:KyokuState = KyokuState()  # kyoku info - cleared every newround
+
         ### about last reaction
         self.last_reaction:dict = None          # last bot output reaction
         self.last_reaction_pending:bool = True  # reaction pending until there is new liqi msg indicating the reaction is done/expired
         self.last_reaction_time:float = None    # last bot reaction calculation time
         self.last_operation:dict = None         # liqi msg 'operation' element
         self.last_op_step:int = None            # liqi msg 'step' element
-        
-        ### Internal Status flags        
+
+        ### Internal Status flags
         self.is_bot_calculating:bool = False    # if bot is calculating reaction
         self.is_ms_syncing:bool = False         # if mjai_bot is running syncing from MS (after disconnection)
         self.is_round_started:bool = False
         """ if any new round has started (so game info is available)"""
-        self.is_game_ended:bool = False         # if game has ended    
-             
+        self.is_game_ended:bool = False         # if game has ended
+
     def get_game_info(self) -> GameInfo:
-        """ Return game info. Return None if N/A"""        
+        """ Return game info. Return None if N/A"""
         if self.is_round_started:
             gi = GameInfo(
                 bakaze = self.kyoku_state.bakaze,
@@ -98,16 +98,16 @@ class GameState:
                 self_reached = self.kyoku_state.self_in_reach,
                 self_seat = self.seat,
                 player_reached = self.kyoku_state.player_reach.copy(),
-                is_first_round = self.kyoku_state.first_round,                
+                is_first_round = self.kyoku_state.first_round,
             )
             return gi
         else:   # if game not started: None
             return None
-    
+
     # def _update_info_from_bot(self):
     #     if self.is_round_started:
     #         self.my_tehai, self.my_tsumohai = self.mjai_bot.get_hand_info()
-            
+
     def get_pending_reaction(self) -> dict:
         """ Return the last pending reaction (not acted on)
         returns:
@@ -117,11 +117,11 @@ class GameState:
         if self.last_reaction_pending:
             return self.last_reaction
         else:
-            return None    
-        
+            return None
+
     def input(self, liqi_msg: dict) -> dict | None:
-        """ Input Majsoul liqi msg for processing and return result MJAI msg if any. 
-        
+        """ Input Majsoul liqi msg for processing and return result MJAI msg if any.
+
         params:
             liqi_msg(dict): parsed Majsoul message in liqi dict format
         returns:
@@ -130,6 +130,9 @@ class GameState:
         self.is_bot_calculating = True
         start_time = time.time()
         reaction = self._input_inner(liqi_msg)
+
+        # print("reaction",reaction)
+
         time_used = time.time() - start_time
         if reaction is not None:
             # Update last_reaction (not none) and set it to pending
@@ -143,7 +146,7 @@ class GameState:
             f.write("Liqi_msg: " + json.dumps(liqimsg, ensure_ascii=False, default=str) + "\n")
             f.write("=" * 50 + "\n")  # 分隔符，表示新的回合
 
-    def _input_inner(self, liqi_msg: dict) -> dict | None:        
+    def _input_inner(self, liqi_msg: dict) -> dict | None:
         liqi_type = liqi_msg['type']
         liqi_method = liqi_msg['method']
         liqi_data = liqi_msg['data']
@@ -154,36 +157,52 @@ class GameState:
         if (liqi_method == LiqiMethod.syncGame or liqi_method == LiqiMethod.enterGame) and liqi_type == MsgType.RES:
             # syncGame: disconnect and reconnect
             # enterGame: enter game late, while others have started
+            # print(1)
             return self.ms_sync_game(liqi_data)
-        
+
+
         # finish syncing
         if liqi_method == LiqiMethod.finishSyncGame:
             self.is_ms_syncing = False
+            # print(2)
             return None
-                
+
         # All players are ready
         elif liqi_method == LiqiMethod.fetchGamePlayerState:
+            # print(3)
             if liqi_type == MsgType.RES:
+                # print(4)
                 # seems it's always all ready: 'data': {'stateList': ['READY', 'READY', 'READY', 'READY']}
                 return None
-        
+
         # Game Start
         elif liqi_method == LiqiMethod.authGame:
+            # print(5)
             if liqi_type == MsgType.REQ:
                 # request entering game. account id for seat index
+                # print(7)
+                # print(liqi_data)
+                # print("\n")
+                # print(liqi_data['accountId'])
+
                 self.account_id = liqi_data['accountId']
+
                 return None
             elif liqi_type == MsgType.RES:
+                # print(6)
+                self.account_id = 17457800
                 # response with game info (first entering game)
                 return self.ms_auth_game(liqi_data)
             else:
+                # print(7)
                 raise RuntimeError(f'Unexpected liqi message, method={liqi_method}, type={liqi_type}')
-        
+
         # Actions
         elif liqi_method == LiqiMethod.ActionPrototype: # assert all ActionPrototype are notify type
             # We assume here, when there is new action, last reaction has done/expired
             self.last_reaction_pending = False
-            
+
+            # print("liqi_data " ,liqi_data)
             # record operation and step no. for later use (automation).
             # newround is step 1 for Game start (where MJStart is step 0), and step 0 for other rounds?
             if 'step' in liqi_data:
@@ -197,37 +216,38 @@ class GameState:
                         LOGGER.warning("No operation List: %s", liqi_data['data']['operation'])
             else:
                 LOGGER.warning("No data in liqi_data: %s", liqi_data)
-            
+
             if liqi_data['name'] == LiqiAction.NewRound:
                 self.kyoku_state.first_round = True
                 return self.ms_new_round(liqi_data)
-            
-            else:   # other rounds                             
-                self.kyoku_state.first_round = False        # not first round       
-                return self.ms_action_prototype(liqi_data) 
-        
+
+            else:   # other rounds
+                self.kyoku_state.first_round = False        # not first round
+                return self.ms_action_prototype(liqi_data)
+
         # end_game
         elif liqi_method == LiqiMethod.NotifyGameEndResult:
             return self.ms_game_end_results(liqi_data)
-        
+
         # Game terminate
         elif liqi_method == LiqiMethod.NotifyGameTerminate:
             self.is_game_ended = True
             return None
-        
+
         # message to ignore
         elif liqi_method in NO_EFFECT_METHODS:
             return None
-        
+
         # unexpected message
         else:
             LOGGER.warning('Other liqi msg (ignored): %s', liqi_msg)
-            return None        
-        
-    
+            return None
+
+
     def ms_sync_game(self, liqi_data:dict) -> dict:
         """ Sync Game
         Every game start there is sync message (may contain no data)"""
+        # print("Im Called")
         self.is_ms_syncing = True
         LOGGER.debug('Start syncing game')
         sync_msgs = LiqiProto().parse_syncGame(liqi_data)
@@ -242,7 +262,7 @@ class GameState:
             return reacts[-1]
         else:
             return None
-    
+
     def ms_auth_game(self, liqi_data:dict) -> dict:
         """ Game start, initial info"""
         try:
@@ -257,13 +277,15 @@ class GameState:
             self.is_game_ended = True
             return None
         if len(seatList) == 4:
-            self.game_mode = GameMode.MJ4P            
+            self.game_mode = GameMode.MJ4P
         elif len(seatList) == 3:
             self.game_mode = GameMode.MJ3P
         else:
             raise RuntimeError(f"Unexpected seat len:{len(seatList)}")
         LOGGER.info("Game Mode: %s", self.game_mode.name)
-        
+
+        print("self.account_id ",self.account_id)
+
         self.seat = seatList.index(self.account_id)
         self.mjai_bot.init_bot(self.seat, self.game_mode)
         # Start_game has no effect for mjai bot, omit here
@@ -272,10 +294,10 @@ class GameState:
                 'type': MjaiType.START_GAME,
                 'id': self.seat
             }
-        )        
+        )
         self._react_all()
-        return None     # no reaction for start_game     
-    
+        return None     # no reaction for start_game
+
     def ms_new_round(self, liqi_data:dict) -> dict:
         """ Start kyoku """
         self.kyoku_state = KyokuState()
@@ -293,7 +315,7 @@ class GameState:
         self.player_scores = liqi_data_data['scores']
         if self.game_mode in [GameMode.MJ3P]:
             self.player_scores = self.player_scores + [0]
-        tehais_mjai = [['?']*13]*4        
+        tehais_mjai = [['?']*13]*4
         my_tehai_ms = liqi_data_data['tiles']
 
         self.kyoku_state.my_tehai = [mj_helper.cvt_ms2mjai(tile) for tile in my_tehai_ms]
@@ -315,7 +337,7 @@ class GameState:
                 'actor': self.seat,
                 'pai': self.kyoku_state.my_tsumohai
                 }
-            
+
         elif len(self.kyoku_state.my_tehai) == 13:      # self not East
             tehais_mjai[self.seat] = self.kyoku_state.my_tehai
             tsumo_msg = {
@@ -325,7 +347,7 @@ class GameState:
                 }
         else:
             raise RuntimeError(f"Unexpected tehai tiles: {len(my_tehai_ms)=}")
-        
+
         # append messages and react
         start_kyoku_msg = {
             'type': MjaiType.START_KYOKU,
@@ -341,19 +363,19 @@ class GameState:
         self.mjai_pending_input_msgs.append(start_kyoku_msg)
         if tsumo_msg:
             self.mjai_pending_input_msgs.append(tsumo_msg)
-        
+
         self.is_round_started = True
         return self._react_all(liqi_data_data)
-    
+
     def ms_action_prototype(self, liqi_data:dict) -> dict:
-        """ process actionPrototype msg, generate mjai msg and have mjai react to it"""        
+        """ process actionPrototype msg, generate mjai msg and have mjai react to it"""
         liqi_data_name = liqi_data['name']
         # when there is new action, accept reach, unless it is agari
         if not liqi_data_name == LiqiAction.Hule:
             if self.kyoku_state.pending_reach_acc is not None:
                 self.mjai_pending_input_msgs.append(self.kyoku_state.pending_reach_acc)
                 self.kyoku_state.pending_reach_acc = None
-        
+
         liqi_data_data = liqi_data['data']
         if 'data' in liqi_data:
             # Process dora events
@@ -366,8 +388,8 @@ class GameState:
                             'dora_marker': mj_helper.cvt_ms2mjai(liqi_data_data['doras'][-1])
                         }
                     )
-                    self.kyoku_state.doras_ms = liqi_data_data['doras']        
-        
+                    self.kyoku_state.doras_ms = liqi_data_data['doras']
+
         # LiqiAction.DealTile -> MJAI_TYPE.TSUMO
         if liqi_data_name == LiqiAction.DealTile:
             actor = liqi_data_data['seat']
@@ -386,8 +408,9 @@ class GameState:
                     'pai': tile_mjai
                 }
             )
+            # print("liqi_data_data ",liqi_data_data)
             return self._react_all(liqi_data_data)
-        
+
         # LiqiAction.DiscardTile -> MJAI_TYPE.DAHAI
         elif liqi_data_name == LiqiAction.DiscardTile:
             actor = liqi_data_data['seat']
@@ -401,7 +424,7 @@ class GameState:
             # print("self.seat ", self.seat)
 
             if actor == self.seat:  # update self hand info
-                if self.kyoku_state.my_tsumohai:                
+                if self.kyoku_state.my_tsumohai:
                     self.kyoku_state.my_tehai.append(self.kyoku_state.my_tsumohai)
                     self.kyoku_state.my_tsumohai = None
 
@@ -412,12 +435,12 @@ class GameState:
 
                 # print(f"after-mytenhai: {self.kyoku_state.my_tehai}")
 
-                self.kyoku_state.my_tehai = mj_helper.sort_mjai_tiles(self.kyoku_state.my_tehai)            
-            
+                self.kyoku_state.my_tehai = mj_helper.sort_mjai_tiles(self.kyoku_state.my_tehai)
+
             if liqi_data_data['isLiqi']:     # Player declares reach
                 if liqi_data_data['seat'] == self.seat:  # self reach
-                    self.kyoku_state.self_in_reach = True                    
-                
+                    self.kyoku_state.self_in_reach = True
+
                 self.kyoku_state.player_reach[actor] = True
                 self.mjai_pending_input_msgs.append(
                     {
@@ -430,7 +453,7 @@ class GameState:
                     'type': MjaiType.REACH_ACCEPTED,
                     'actor': actor
                     }
-                    
+
             self.mjai_pending_input_msgs.append(
                 {
                     'type': MjaiType.DAHAI,
@@ -439,9 +462,9 @@ class GameState:
                     'tsumogiri': tsumogiri
                 }
             )
-                
-            return self._react_all(liqi_data_data)        
-        
+
+            return self._react_all(liqi_data_data)
+
         # LiqiAction.ChiPengGang -> MJAI CHI/PON/DAIMINKAN
         elif liqi_data_name == LiqiAction.ChiPengGang:
             actor = liqi_data_data['seat']
@@ -456,9 +479,9 @@ class GameState:
                     consumed_mjai.append(mj_helper.cvt_ms2mjai(liqi_data_data['tiles'][idx]))
             if actor == self.seat:  # update my hand info
                 for c in consumed_mjai:
-                    self.kyoku_state.my_tehai.remove(c)                
+                    self.kyoku_state.my_tehai.remove(c)
                 self.kyoku_state.my_tehai = mj_helper.sort_mjai_tiles(self.kyoku_state.my_tehai)
-                
+
             assert target != actor
             assert len(consumed_mjai) != 0
             assert tile_mjai != ''
@@ -499,7 +522,7 @@ class GameState:
                 case _:
                     raise ValueError(f"Unknown ChiPengGang type {liqi_data_data['type']}")
             return self._react_all(liqi_data_data)
-                    
+
         # LiqiAction.AnGangAddGang -> MJAI ANKAN / KAKAN
         elif liqi_data_name == LiqiAction.AnGangAddGang:
             actor = liqi_data_data['seat']
@@ -509,13 +532,13 @@ class GameState:
                     consumed_mjai = [tile_mjai.replace("r", "")]*4
                     if tile_mjai[0] == '5' and tile_mjai[1] != 'z':
                         consumed_mjai[0] += 'r'
-                    
+
                     if actor == self.seat:      # update hand info. ankan is after tsumo, so there is tsumohai
                         self.kyoku_state.my_tehai.append(self.kyoku_state.my_tsumohai)
                         self.kyoku_state.my_tsumohai = None
                         for c in consumed_mjai:
                             self.kyoku_state.my_tehai.remove(c)
-                        self.kyoku_state.my_tehai = mj_helper.sort_mjai_tiles(self.kyoku_state.my_tehai)                        
+                        self.kyoku_state.my_tehai = mj_helper.sort_mjai_tiles(self.kyoku_state.my_tehai)
 
                     self.mjai_pending_input_msgs.append(
                         {
@@ -529,13 +552,13 @@ class GameState:
                     consumed_mjai = [tile_mjai.replace("r", "")] * 3
                     if tile_mjai[0] == "5" and not tile_mjai.endswith("r"):
                         consumed_mjai[0] = consumed_mjai[0] + "r"
-                    
+
                     if actor == self.seat:      # update hand info. kakan is after tsumo, so there is tsumohai
                         self.kyoku_state.my_tehai.append(self.kyoku_state.my_tsumohai)
                         self.kyoku_state.my_tsumohai = None
                         self.kyoku_state.my_tehai.remove(tile_mjai)
                         self.kyoku_state.my_tehai = mj_helper.sort_mjai_tiles(self.kyoku_state.my_tehai)
-                        
+
                     self.mjai_pending_input_msgs.append(
                         {
                             'type': MjaiType.KAKAN,
@@ -545,7 +568,7 @@ class GameState:
                         }
                     )
             return self._react_all(liqi_data_data)
-        
+
         # (3p Mahjong only) LiqiAction.BaBei -> MJAI NUKIDORA
         elif liqi_data_name == LiqiAction.BaBei:
             actor = liqi_data_data['seat']
@@ -554,7 +577,7 @@ class GameState:
                 self.kyoku_state.my_tsumohai = None
                 self.kyoku_state.my_tehai.remove('N')
                 self.kyoku_state.my_tehai = mj_helper.sort_mjai_tiles(self.kyoku_state.my_tehai)
-            
+
             self.mjai_pending_input_msgs.append(
                 {
                     'type': MjaiType.NUKIDORA,
@@ -563,7 +586,7 @@ class GameState:
                 }
             )
             return self._react_all(liqi_data_data)
-        
+
         # LiqiAction.Hule -> MJAI END_KYOKU
         elif liqi_data_name in LiqiAction.Hule:
             return self.ms_end_kyoku()
@@ -576,15 +599,15 @@ class GameState:
         elif liqi_data_name == LiqiAction.LiuJu:
             return self.ms_end_kyoku()
 
-        # LiqiAction.MJStart: once at new game start 
+        # LiqiAction.MJStart: once at new game start
         elif liqi_data_name == LiqiAction.MJStart:
             # no effect. {'name': 'ActionMJStart', 'step': 0, 'data': {}}
             return None
-        
+
         else:
             LOGGER.warning('Unknown liqi_data name %s', liqi_data_name)
             return None
-        
+
     def ms_end_kyoku(self) -> dict | None:
         """ End kyoku and get None as reaction"""
         self.mjai_pending_input_msgs = []
@@ -595,14 +618,14 @@ class GameState:
         # )
         # self._react_all()
         return None     # no reaction for end_kyoku
-    
-        
+
+
     def ms_game_end_results(self, liqi_data:dict) -> dict:
         """ End game in normal way (getting results)"""
         if 'result' in liqi_data:
             # process end result
             pass
-        
+
         # self.mjai_pending_input_msgs.append(
         #     {
         #         'type': MJAI_TYPE.END_GAME
@@ -611,24 +634,25 @@ class GameState:
         # self._react_all()
         self.is_game_ended = True
         return None     # no reaction for end_game
-    
+
     def ms_template(self, liqi_data:dict) -> dict:
         """ template"""
-            
+
     def _react_all(self, data=None) -> dict | None:
         """ Feed all pending messages to AI bot and get bot reaction
         ref: https://mjai.app/docs/mjai-protocol
         Params:
-            data (dict): liqimsg['data'] / ['data']['data'] 
+            data (dict): liqimsg['data'] / ['data']['data']
         returns:
             dict: the last reaction(output) from bot, or None
         """
-        if data: 
+        if data:
             if 'operation' not in data or 'operationList' not in data['operation'] or len(data['operation']['operationList']) == 0:
                 return None
         try:
             if len(self.mjai_pending_input_msgs) == 1:
                 LOGGER.info("Bot in: %s", self.mjai_pending_input_msgs[0])
+                # print("isCalled")
                 output_reaction = self.mjai_bot.react(self.mjai_pending_input_msgs[0])
             else:
                 LOGGER.info("Bot in (batch):\n%s", '\n'.join(str(m) for m in self.mjai_pending_input_msgs))
@@ -637,7 +661,8 @@ class GameState:
             LOGGER.error("Bot react error: %s", e, exc_info=True)
             output_reaction = None
         self.mjai_pending_input_msgs = [] # clear intput queue
-        
+
+
         if output_reaction is None:
             return None
         else:
@@ -646,6 +671,7 @@ class GameState:
                 is_3p = True
             else:
                 is_3p = False
-                
+
             reaction_convert_meta(output_reaction,is_3p)
+            # print("output_reaction ",output_reaction)
             return output_reaction
