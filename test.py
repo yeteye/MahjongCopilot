@@ -1,6 +1,8 @@
 import time
 import json
-from get_react import add_liqi_msg_to_log  # ✅ **导入 `add_liqi_msg_to_log`**
+import threading
+
+from get_react import add_liqi_msg_to_log,react_api  # ✅ **导入 `add_liqi_msg_to_log`**
 
 WHOLE_GAME_LOG_PATH = "game_log.txt"  # **完整游戏日志**
 DELAY_BETWEEN_MESSAGES = 0.5  # **每条消息之间的延迟（秒）**
@@ -39,5 +41,12 @@ def read_whole_game_log():
             print(f"⚠️ 处理 `LiqiMsg` 失败: {e}")
 
 
+
+
 if __name__ == "__main__":
-    read_whole_game_log()  # **启动测试**
+    # **启动 react_api 线程**
+    react_thread = threading.Thread(target=react_api, daemon=True)
+    react_thread.start()
+
+    # **继续执行 read_whole_game_log**
+    read_whole_game_log()
