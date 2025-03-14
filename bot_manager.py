@@ -333,7 +333,7 @@ class BotManager:
 
     def log_game_message(self,liqimsg, reaction):
         """ 将 liqimsg 和 reaction 记录到 game_log.txt 文件 """
-        with open("new_game_log.txt", "a", encoding="utf-8") as f:
+        with open("game_log/simulate_log.txt", "a", encoding="utf-8") as f:
             f.write("LiqiMsg: " + json.dumps(liqimsg, ensure_ascii=False, default=str) + "\n")
             f.write("Reaction: " + json.dumps(reaction, ensure_ascii=False, default=str) + "\n")
             f.write("=" * 50 + "\n")  # 分隔符，表示新的回合

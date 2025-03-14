@@ -7,9 +7,9 @@ from game.game_state import GameState
 from trans_to_cn import get_action_prompt
 
 # 文件路径
-GAME_LOG_PATH = "simulate.txt"
-NEW_GAME_LOG_PATH = "new_game_log.txt"
-REACTION_LOG_PATH = "reaction_log.txt"
+GAME_LOG_PATH = "game_log/test.txt"
+NEW_GAME_LOG_PATH = "game_log/new_game_log.txt"
+REACTION_LOG_PATH = "game_log/reaction_log.txt"
 
 # 监听状态
 LAST_FILE_SIZE = 0  # 记录 `game_log.txt` 读取的位置
@@ -86,7 +86,7 @@ def process_new_liqi_msgs():
                         new_log.write(line + "\n")
                         new_log.write("=" * 50 + "\n")
 
-                    print(f"✅ 处理消息: {method}")
+                    # print(f"✅ 处理消息: {method}")
 
                     # 🚨 **检测游戏结束信号，清空 `new_game_log.txt`**
                     if any(end_signal in method for end_signal in END_GAME_SIGNALS):
@@ -141,7 +141,7 @@ def add_liqi_msg_to_log(liqi_msg: dict):
         f.write("LiqiMsg: " + json.dumps(liqi_msg, ensure_ascii=False) + "\n")
         f.write("=" * 50 + "\n")
 
-    print(f"✅ 已添加新 `LiqiMsg`: {liqi_msg['method']}")
+    # print(f"✅ 已添加新 `LiqiMsg`: {liqi_msg['method']}")
     time.sleep(0.1)  # **短暂等待，让监听器检测到变更**
 
 

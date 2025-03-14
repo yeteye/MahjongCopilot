@@ -2,17 +2,26 @@ import json
 from enum import Enum
 from liqi import MsgType
 
+#待优化
 
 # 定义牌符号对应的中文名称字典
 tile_mapping = {
-    "1m": "一萬", "2m": "二萬", "3m": "三萬", "4m": "四萬", "5m": "五萬",
-    "6m": "六萬", "7m": "七萬", "8m": "八萬", "9m": "九萬",
-    "1p": "一筒", "2p": "二筒", "3p": "三筒", "4p": "四筒", "5p": "五筒",
-    "6p": "六筒", "7p": "七筒", "8p": "八筒", "9p": "九筒",
-    "1s": "一索", "2s": "二索", "3s": "三索", "4s": "四索", "5s": "五索",
-    "6s": "六索", "7s": "七索", "8s": "八索", "9s": "九索",
-    "E": "东", "S": "南", "W": "西", "N": "北",
-    "F": "红中", "P": "发财", "C": "白板"
+        '1m': '一萬', '2m': '二萬', '3m': '三萬', '4m': '四萬', '5m': '伍萬',
+        '6m': '六萬', '7m': '七萬', '8m': '八萬', '9m': '九萬',
+        '1p': '一筒', '2p': '二筒', '3p': '三筒', '4p': '四筒', '5p': '伍筒',
+        '6p': '六筒', '7p': '七筒', '8p': '八筒', '9p': '九筒',
+        '1s': '一索', '2s': '二索', '3s': '三索', '4s': '四索', '5s': '伍索',
+        '6s': '六索', '7s': '七索', '8s': '八索', '9s': '九索',
+        'E': '東', 'S': '南', 'W': '西', 'N': '北',
+        'C': '中', 'F': '發', 'P': '白',
+        '5mr': '赤伍萬', '5pr': '赤伍筒', '5sr': '赤伍索',
+
+}
+
+action_mapping = {
+        'reach': '立直', 'pon': '碰', 'kan_select':'杠',
+        'chi_low': '吃-低', 'chi_mid': '吃-中', 'chi_high': '吃-高',
+        'hora': '和牌', 'ryukyoku': '流局', 'none': '跳过', 'nukidora':'拔北'
 }
 
 def tile_to_chinese(tile_code: str) -> str:
@@ -45,6 +54,8 @@ def translate_reaction(reaction: dict):
                        f" 当前向听数为 {shanten}，模型评估耗时 {eval_time} 纳秒，{greedy_text}。"
                        f" 候选操作：{options_text}。")
         return description
+    elif rtype == 'hora':
+        return
     elif rtype == "none":
         meta = reaction.get("meta", {})
         shanten = meta.get("shanten", "未知")

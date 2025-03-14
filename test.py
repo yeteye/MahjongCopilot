@@ -4,8 +4,8 @@ import threading
 
 from get_react import add_liqi_msg_to_log,react_api  # ✅ **导入 `add_liqi_msg_to_log`**
 
-WHOLE_GAME_LOG_PATH = "game_log.txt"  # **完整游戏日志**
-DELAY_BETWEEN_MESSAGES = 0.5  # **每条消息之间的延迟（秒）**
+WHOLE_GAME_LOG_PATH = "game_log/simulate.txt"  # **完整游戏日志**
+DELAY_BETWEEN_MESSAGES = 0.05  # **每条消息之间的延迟（秒）**
 
 
 def read_whole_game_log():
@@ -30,7 +30,7 @@ def read_whole_game_log():
 
         try:
             liqi_msg = json.loads(json_str)  # **解析 JSON**
-            print(f"📤 发送消息到 `game_log.txt`: {liqi_msg['method']}")
+            # print(f"📤 发送消息到 `game_log.txt`: {liqi_msg['method']}")
             add_liqi_msg_to_log(liqi_msg)  # **调用 API 添加到 `game_log.txt`**
 
             time.sleep(DELAY_BETWEEN_MESSAGES)  # **模拟延迟，避免一次性写入过快**

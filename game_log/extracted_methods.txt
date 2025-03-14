@@ -1,0 +1,11 @@
+.lq.ActionPrototype
+.lq.FastTest.authGame
+.lq.FastTest.broadcastInGame
+.lq.FastTest.confirmNewRound
+.lq.FastTest.enterGame
+.lq.FastTest.fetchGamePlayerState
+.lq.FastTest.inputChiPengGang
+.lq.FastTest.inputOperation
+.lq.NotifyGameBroadcast
+.lq.NotifyGameEndResult
+.lq.NotifyPlayerLoadGameReady

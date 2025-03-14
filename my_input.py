@@ -29,7 +29,7 @@ def simulated_message_source():
     这里假设你已将手动输入的 liqi_msg 保存在一个列表中。
     """
     messages = []
-    with open("game_log.txt", "r", encoding="utf-8") as f:
+    with open("game_log/game_log.txt", "r", encoding="utf-8") as f:
         content = f.read()
         blocks = content.split("==================================================")
         prefix = "LiqiMsg: "
