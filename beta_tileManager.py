@@ -15,10 +15,13 @@ class TileManager:
         self.discards = {i: [] for i in range(4)}  # 各玩家的弃牌
         self.seat_map = {}          # 玩家 ID 到座位号的映射
         self.cancel_chipongang = []
-        self.can_chipongang = None  # 存储待处理的吃/碰/杠操作
 
+        self.can_chipongang = False  # 存储待处理的吃/碰/杠操作
+
+        self.is_liqi = False          # 我方是否立直
         self.justLiqi = False       # 是否刚刚立直
         self.can_liqi = False
+
         self.zhenting = False         # 我方是否振听
         self.tingpai = []             # 我方听牌列表
         self.liqiTodeal = []  # 立直后的限定出牌
@@ -44,7 +47,7 @@ class TileManager:
         self.melds = {i: [] for i in range(4)}
         self.discards = {i: [] for i in range(4)}
 
-        self.can_chipongang = None
+        self.can_chipongang = False
         self.justLiqi = False
 
         self.liqiTodeal = []      #立直后的限定出牌
@@ -235,16 +238,20 @@ class TileManager:
         if self.hands.count(effective_tile) >= 2:
             actions.append({
                 "type": 3,  # 3 表示碰
-                "pai": effective_tile,
-                "combination": [effective_tile, effective_tile, effective_tile]
+                "changeTiles": [],
+                "changeTileStates": [],
+                "gapType": 0,
+                "combination": [f"{effective_tile}|{effective_tile}"]
             })
 
         # 杠：如果手中有三张相同的牌
         if self.hands.count(effective_tile) == 3:
             actions.append({
                 "type": 5,  # 5 表示大明杠
-                "pai": effective_tile,
-                "combination": [effective_tile, effective_tile, effective_tile, effective_tile]
+                "changeTiles": [],
+                "changeTileStates": [],
+                "gapType": 0,
+                "combination": [f"{effective_tile}|{effective_tile}|{effective_tile}"]
             })
 
         # 吃：仅适用于数字牌（m, p, s）
@@ -259,15 +266,46 @@ class TileManager:
                 {f"{num-1}{suit}", f"{num+1}{suit}"},
                 {f"{num+1}{suit}", f"{num+2}{suit}"}
             ]
+            hand_copy = self.hands.copy()
+            for i in self.melds[self.Myseat]:
+                hand_copy.remove(i)
+
+            chi = []
             for chi_set in chi_combinations:
-                if chi_set.issubset(set(self.hands)):
-                    actions.append({
-                        "type": 2,  # 2 表示吃
-                        "pai": effective_tile,
-                        "combination": list(chi_set)
-                    })
+                if chi_set.issubset(set(hand_copy)):  # 确保 chi_set 在手牌中
+                    chi.append(list(chi_set))
+
+            if len(chi) == 2:
+                actions.append({
+                    "type": 2,  # 2 表示吃
+                    "changeTiles": [],
+                    "changeTileStates": [],
+                    "gapType": 0,
+                    "combination": [f"{chi[0]}|{chi[1]}"]
+                })
+            elif len(chi) == 4:
+                actions.append({
+                    "type": 2,  # 2 表示吃
+                    "changeTiles": [],
+                    "changeTileStates": [],
+                    "gapType": 0,
+                    "combination": [f"{chi[0]}|{chi[1]}", f"{chi[2]}|{chi[3]}"]
+                })
+            elif len(chi) == 6:
+                actions.append({
+                    "type": 2,  # 2 表示吃
+                    "changeTiles": [],
+                    "changeTileStates": [],
+                    "gapType": 0,
+                    "combination": [
+                        f"{chi[0]}|{chi[1]}",
+                        f"{chi[2]}|{chi[3]}",
+                        f"{chi[4]}|{chi[5]}"
+                    ]
+                })
+
         # 将检测到的操作更新到当前操作列表中
-        if actions:
+        if len(actions)>0:
             self.can_chipongang = True
             self.current_operationList = actions
         else:
@@ -290,13 +328,15 @@ class TileManager:
             tile = data["tile"]
 
             self.discards[seat].append(tile)
-            # 对手出牌时，检测我方是否有可操作牌（吃、碰、杠）
+
             self.get_possible_actions(tile)
-            # 如果没有可操作动作，则清空当前操作列表
-            self.clear_operations()
+
             return
 
         elif data["state"] == "MyAction":
+
+            tile = data["tile"]
+            self.discards[self.Myseat].append(tile)
 
             if self.player[self.Myseat].get("is_liqi", False):
                 data["state"] = "My_Liqi"
@@ -310,22 +350,27 @@ class TileManager:
 
             self.handle_self_discard(data["tile"], data["getTile"])
             self.count_tingpaiList()
+
             if len(self.tingpai) > 0:
                 self.can_liqi = True
                 self.zhentingif(data["getTile"])
-
-
             return
 
         elif data["state"] == "MyAction_Chipongang":
             self.handle_self_chipongang(data)
+
             return
 
         elif data["state"] == "MyAction_Liqi":
             self.declare_liqi(data["seat"])
             self.liqiTodeal = data["tile_list"]
+            # self.discards[self.Myseat].append(data["tile"])
+            self.hands.append(data["getTile"])
+
+
 
             self.count_tingpaiList()
+
 
 
             return
@@ -333,33 +378,26 @@ class TileManager:
         elif data["state"] == "Other_Chipongang":
             # 对手执行吃/碰/杠操作时，更新对手的明牌区
             seat = data["seat"]
+            tile = data["tile"]
             operation = data.get("operation", {})
 
-            meld = {
-                "type": operation.get("type"),
-                "combination": operation.get("combination"),
-                "froms": operation.get("form")
-            }
+            self.get_possible_actions(tile)
+            self.discards[seat].append(tile)
+            self.can_chipongang = False
+
+            meld = [i for i in operation["combination"]]
+            self.melds[seat].append(meld)
 
             if operation["type"] in [4,5,6]: #对手大明杠/暗杠/加杠
                 self.doras.append(data["dora"])
 
-            self.melds[seat].append(meld)
-            # print(f"🚀 玩家 {seat} 明牌更新: {self.melds[seat]}")
-            # 返回相应的通知消息或空（视业务逻辑而定）
-            tile = data["tile"]
-            actions = self.get_possible_actions(tile)
-            if actions:
-                self.can_chipongang = {
-                    "seat": self.Myseat,
-                    "operationList": actions
-                }
-
-                return
-
             return
 
         elif data["type"] == "Other_liqi":
+            seat = data["seat"]
+            tile = data["tile"]
+            self.discards[seat].append(tile)
+            self.get_possible_actions(tile)
             self.declare_liqi(data["seat"])
             return
         return
@@ -388,44 +426,27 @@ class TileManager:
         self.tingpai = self.compute_tingpai(self.hands)
         self.is_furiten()
 
-
-        self.discards[self.Myseat].append(tile)
-
         self.can_liqi = self.LiqiJudge()
 
     def handle_self_chipongang(self, data):
         if data["operation"]["type"] in [4 , 5, 6]:
             self.doras = data["doras"]
 
+        self.can_chipongang = False
+        self.melds[self.Myseat].append(data["operation"]["combination"])
+
         return
 
 
     def clear_operations(self):
         """ 清空待处理操作和当前操作列表 """
-        self.can_chipongang = None
+        self.can_chipongang = False
         self.current_operationList = []
 
     def get_ChiPengGang_flag(self):
         """ 返回是否有吃碰杠操作标志，依据当前操作列表 """
         return len(self.current_operationList)
 
-    def get_player_info(self, account_id):
-        """
-        获取玩家的相关信息，如果已存在则返回已设置的，否则返回默认信息。
-        供 generate_auth_game_msg 调用。
-        """
-        for seat, info in self.player.items():
-            if info.get("accountId") == account_id:
-                return {
-                    "avatarId": 400101,
-                    "nickname": f"VirtualPlayer{seat+1}",
-                    "score": 100 * (seat + 1)
-                }
-        return {
-            "avatarId": 400101,
-            "nickname": f"Player_{account_id}",
-            "score": 100
-        }
 
     def declare_liqi(self, seat):
         """
@@ -443,8 +464,6 @@ class TileManager:
 
         # if self.player[seat].get("zhenting", False):
         #     self.player[seat]["zhenting"] = False
-
-
     def get_liqi_msg(self):
         liqi_msg = []
         for i in range(4):

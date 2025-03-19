@@ -137,13 +137,16 @@ def generate_auth_game_msg(seat_list):
         }
     }
 
-    return generate_liqi_msg("MsgType.RES", ".lq.FastTest.authGame", {
+
+    start_msg = generate_liqi_msg("MsgType.RES", ".lq.FastTest.authGame", {
         "players": players,
         "seatList": seat_list,
         "gameConfig": game_config,
         "isGameStart": False,
         "readyIdList": []
     })
+
+    return start_msg
 
 
 def convert_image_data(image_data):
@@ -152,9 +155,21 @@ def convert_image_data(image_data):
     """
 
     tile_manager.handle_discard(image_data)
-
     state = image_data["state"]
     msgs = []
+
+    if tile_manager.can_chipongang and (state not in ["MyAction_Chipongang", "Other_Chipongang"]):
+        tile_manager.can_chipongang = False
+        req_messages = generate_liqi_msg("MsgType.REQ", ".lq.FastTest.inputChiPengGang", {
+            "cancelOperation": True,
+            "timeuse": 2,
+            "type": 0,
+            "index": 0
+        })
+        res_id = get_next_msg_id() - 1
+        res_messages = generate_liqi_msg("MsgType.RES", ".lq.FastTest.inputChiPengGang", {}, id=res_id)
+        msgs.extend([req_messages, res_messages])
+
     step = tile_manager.step
 
     if state == "GameStart":
@@ -207,6 +222,12 @@ def convert_image_data(image_data):
             "stateList": ["READY", "READY", "READY", "READY"]
         }, id=confirm_req_id)
 
+        end_msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.NotifyGameEndResult", {
+            "step": -1,
+            "name": "ActionHule",
+            "data": {}
+        }, id=-1)
+
         tile_manager.step = step + 1
         msgs.extend([auth_req, enter_game_req, loadplayer_msg, enter_game_res, MJstart_msg, fetch_state_req, fetch_state_res, action_new_round])
         return msgs
@@ -224,8 +245,11 @@ def convert_image_data(image_data):
         if tile == getTile:
             moqie = True
 
+        # if not tile_manager.justLiqi:
+
         #如果可以立直，则operationList中有liqi
         if tile_manager.can_liqi:
+
             tile_manager.leftTileCount -= 1
             deal_msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.ActionPrototype", {
                 "step": step,
@@ -249,33 +273,7 @@ def convert_image_data(image_data):
                             "gapType": 0}],
                         "timeAdd": 25000,
                         "timeFixed": 5000},
-                    "tingpais": [
-                        {
-                        "tile": "5m",
-                        "infos": [{
-                            "tile": "7p",
-                            "haveyi": True,
-                            "count": 1,
-                            "fu": 30,
-                            "biaoDoraCount": 1,
-                            "countZimo": 2,
-                            "fuZimo": 20,
-                            "yiman": False,
-                            "yimanZimo": False
-                        },
-                        {
-                            "tile": "4p",
-                            "haveyi": True,
-                            "count": 1,
-                            "fu": 30,
-                            "biaoDoraCount": 1,
-                            "countZimo": 2,
-                            "fuZimo": 20,
-                            "yiman": False,
-                            "yimanZimo": False
-                        }
-                        ],
-                        "zhenting": False}],
+                    "tingpais":tile_manager.tingpai,
                     "doras": [],
                     "zhenting": False,
                     "tileState": 0,
@@ -382,7 +380,7 @@ def convert_image_data(image_data):
 
         tile_manager.leftTileCount -= 1
 
-        mopai_msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.ActionPrototype", {
+        deal_msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.ActionPrototype", {
             "step": step,
             "name": "ActionDealTile",
             "data":{
@@ -427,7 +425,7 @@ def convert_image_data(image_data):
             }}, id=-1)
 
         tile_manager.step = step + 2
-        msgs.extend([mopai_msg, discard_msg])
+        msgs.extend([deal_msg, discard_msg])
 
         return msgs
 
@@ -441,7 +439,7 @@ def convert_image_data(image_data):
         operationList = tile_manager.current_operationList
 
         if not tile_manager.justLiqi:
-            mopai_msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.ActionPrototype", {
+            deal_msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.ActionPrototype", {
                 "step": step,
                 "name": "ActionDealTile",
                 "data": {
@@ -458,7 +456,7 @@ def convert_image_data(image_data):
 
         else:
             liqi_msg = tile_manager.liqi_msg
-            mopai_msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.ActionPrototype", {
+            deal_msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.ActionPrototype", {
                 "step": step,
                 "name": "ActionDealTile",
                 "data": {
@@ -485,11 +483,12 @@ def convert_image_data(image_data):
                     "seat": seat,
                     "tile": tile,
                     "operation": {
+                        "seat": tile_manager.Myseat,
                         "operationList": operationList,
                         "timeAdd": 20000,
                         "timeFixed": 5000
                     },
-                    "moqie": True,
+                    "moqie": False,
                     "isLiqi": False,
                     "zhenting": False,
                     "tingpais": [],
@@ -498,7 +497,7 @@ def convert_image_data(image_data):
                     "tileState": 0,
                     "revealed": False,
                     "scores": [],
-                    "liqibang": tile_manager.liqibang
+                    "liqibang": 0
                 }
             }, id=-1)
         else:
@@ -524,24 +523,10 @@ def convert_image_data(image_data):
         if step == 1:
             msgs.append(discard_msg)
         else:
-            msgs.extend([mopai_msg,discard_msg])
+            msgs.extend([deal_msg,discard_msg])
 
         tile_manager.justLiqi = False
         tile_manager.step = step + 2
-        return msgs
-
-    elif state == "MyAction_cancel":
-        timeuse = 2
-        #仅限于吃/碰/大明杠的取消
-        req_messages = generate_liqi_msg("MsgType.REQ", ".lq.FastTest.inputChiPengGang", {
-            "cancelOperation": True,
-            "timeuse": timeuse,
-            "type": 0,
-            "index": 0
-        })
-        res_id = get_next_msg_id() - 1
-        res_messages = generate_liqi_msg("MsgType.RES", ".lq.FastTest.inputChiPengGang", {}, id=res_id)
-        msgs.extend([req_messages, res_messages])
         return msgs
 
     elif state == "Other_cancel":      #暂不考虑
@@ -694,6 +679,11 @@ def convert_image_data(image_data):
         operation = image_data["operation"]
         tile = image_data["tile"]
 
+        tileStates = [0, 0]
+
+        if operation["type"] in [4,6]:   #暗杠加杠需要不同处理
+            tileStates = [0, 0, 0]
+
         notify_msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.ActionPrototype", {
             "step": step,
             "name": "ActionChiPengGang",
@@ -701,7 +691,7 @@ def convert_image_data(image_data):
                 "seat": seat,
                 "tiles": operation.get("combination", []),
                 "froms": operation.get("form", []),
-                "tileStates": [0, 0],
+                "tileStates": tileStates,
                 "type": operation["type"]-2 ,
                 "zhenting": False,
                 "tingpais": [],
@@ -739,7 +729,9 @@ def convert_image_data(image_data):
                     "seat": seat,
                     "tile": tile,
                     "operation": {
-                        "operationList": tile_manager.current_operationList
+                        "operationList": tile_manager.current_operationList,
+                        "timeAdd": 20000,
+                        "timeFixed": 5000
                     },
                     "isLiqi": False,
                     "moqie": False,
@@ -763,7 +755,7 @@ def convert_image_data(image_data):
         tile = image_data["tile"]
 
         tile_manager.leftTileCount -= 1
-        mopai_msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.ActionPrototype", {
+        deal_msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.ActionPrototype", {
             "step": step,
             "name": "ActionDealTile",
             "data": {
@@ -825,7 +817,7 @@ def convert_image_data(image_data):
             }, id=-1)
 
         tile_manager.step = step + 2
-        msgs.extend([mopai_msg, discard_msg])
+        msgs.extend([deal_msg, discard_msg])
         return msgs
 
     elif state == "GameEnd":

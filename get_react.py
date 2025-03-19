@@ -67,12 +67,14 @@ def process_new_liqi_msgs():
                 json_str = line[len(prefix):]  # **去掉前缀**
                 try:
                     liqi_msg = json.loads(json_str, object_hook=liqi_object_hook)
+
+                    # print("now processing: ",liqi_msg)
                     method = liqi_msg.get("method", "")
 
                     if any(end_signal in method for end_signal in END_GAME_SIGNALS):
-                        print("游戏结束，清空 `game_log.txt`")
-                        with open(GAME_LOG_PATH, "w", encoding="utf-8") as new_log:
-                            new_log.truncate(0)  # **清空文件**
+                        print("游戏结束")
+                        # with open(GAME_LOG_PATH, "w", encoding="utf-8") as new_log:
+                        #     new_log.truncate(0)  # **清空文件**
                         continue
 
                     # print("now processing: ",liqi_msg)
