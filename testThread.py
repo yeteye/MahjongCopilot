@@ -1,11 +1,12 @@
 import time
 import json
 import threading
-
-from get_react import add_liqi_msg_to_log,react_api  # ✅ **导入 `add_liqi_msg_to_log`**
+import tkinter as tk
+from prompt_ui import update_ui, PromptUI   # ✅ 引入 UI 更新 API
+from get_react import add_liqi_msg_to_log, react_api
 
 WHOLE_GAME_LOG_PATH = "game_log/my_simulate_gen_info.txt"  # **完整游戏日志**
-DELAY_BETWEEN_MESSAGES = 0.05  # **每条消息之间的延迟（秒）**
+DELAY_BETWEEN_MESSAGES = 0.2  # **每条消息之间的延迟（秒）**
 
 
 def read_whole_game_log():
@@ -30,9 +31,7 @@ def read_whole_game_log():
 
         try:
             liqi_msg = json.loads(json_str)  # **解析 JSON**
-            # print(f"📤 发送消息到 `game_log.txt`: {liqi_msg['method']}")
             add_liqi_msg_to_log(liqi_msg)  # **调用 API 添加到 `game_log.txt`**
-
             time.sleep(DELAY_BETWEEN_MESSAGES)  # **模拟延迟，避免一次性写入过快**
 
         except json.JSONDecodeError as e:
@@ -41,12 +40,12 @@ def read_whole_game_log():
             print(f"⚠️ 处理 `LiqiMsg` 失败: {e}")
 
 
-
-
 if __name__ == "__main__":
-    # **启动 react_api 线程**
+
     react_thread = threading.Thread(target=react_api, daemon=True)
     react_thread.start()
 
-    # **继续执行 read_whole_game_log**
-    read_whole_game_log()
+    read_log_thread = threading.Thread(target=read_whole_game_log, daemon=True)
+    read_log_thread.start()
+
+    # root.mainloop()

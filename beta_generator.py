@@ -213,9 +213,6 @@ def convert_image_data(image_data):
 
     elif state == "MyAction":
         # 己方主动出牌，若有待处理操作则先取消
-        if tile_manager.can_chipongang is not None:
-            msgs.extend(tile_manager.generate_cancel_action_msgs())
-            tile_manager.can_chipongang = None
 
         tile = image_data["tile"]
         getTile = image_data["getTile"]
@@ -235,7 +232,7 @@ def convert_image_data(image_data):
                 "name": "ActionDealTile",
                 "data": {
                     "seat": seat,
-                    "tile": image_data["getTile"],
+                    "tile": getTile,
                     "leftTileCount": tile_manager.leftTileCount,
                     "operation": {
                         "seat": seat,
@@ -306,8 +303,8 @@ def convert_image_data(image_data):
                         "seat": seat},
                     "seat": seat,
                     "doras": [],
-                    "zhenting": False,
-                    "tingpais": [],
+                    "zhenting": tile_manager.zhenting,
+                    "tingpais": tile_manager.tingpai,
                     "tileState": 0,
                     "tileIndex": 0}
             }, id=-1)
@@ -581,7 +578,7 @@ def convert_image_data(image_data):
                 "name": "ActionAnGangAddGang",
                 "data": {
                     "type": 3,
-                    "tiles": "9p",
+                    "tiles": list(set(operation["combination"]))[0],
                     "seat": seat,
                     "doras": [],
                     "zhenting": tile_manager.zhenting,
@@ -623,10 +620,10 @@ def convert_image_data(image_data):
                  "tileStates": [0, 0],
                  "seat": seat,
                  "type": 0,
-                 "zhenting": tile_manager.zhenting,
-                 "tingpais": tile_manager.tingpai ,
+                 "zhenting": tile_manager.get("zhenting", False),
+                 "tingpais": tile_manager.get("tingpai", []),
                  "scores": [],
-                 "liqibang": tile_manager.liqibang }}, id=-1)
+                 "liqibang": 0 }}, id=-1)
 
         tile_manager.step = step + 1
         msgs.extend([req_msg, res_msg, notify_msg])
@@ -636,8 +633,7 @@ def convert_image_data(image_data):
         getTile = image_data["getTile"]
         step = tile_manager.step
         seat = tile_manager.Myseat
-
-
+        tile = image_data["tile"]
 
         tile_manager.leftTileCount -= 1
         deal_msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.ActionPrototype", {
@@ -656,36 +652,14 @@ def convert_image_data(image_data):
                     "gapType": 0},
                     {
                     "type": 7,
-                    "combination": ["7z"],
+                    "combination": tile_manager.liqiTodeal,
                     "changeTiles": [],
                     "changeTileStates": [],
                     "gapType": 0}],
                "timeAdd": 20000,
                "timeFixed": 5000,
                "seat": seat},
-               "tingpais": [{
-                   "tile": "7z",
-                   "infos": [{
-                       "tile": "1s",
-                       "fu": 70,
-                       "biaoDoraCount": 1,
-                       "countZimo": 1,
-                       "fuZimo": 60,
-                       "haveyi": False,
-                       "yiman": False,
-                       "count": 0,
-                       "yimanZimo": False},
-                       {
-                       "tile": "4s",
-                       "fu": 70,
-                       "biaoDoraCount": 1,
-                       "countZimo": 1,
-                       "fuZimo": 60,
-                       "haveyi": False,
-                       "yiman": False,
-                       "count": 0,
-                       "yimanZimo": False}],
-                    "zhenting": False}],
+               "tingpais": tile_manager.tingpai ,
                "seat": seat,
                "doras": tile_manager.myDoras,
                "zhenting": False,
@@ -732,7 +706,7 @@ def convert_image_data(image_data):
                 "zhenting": False,
                 "tingpais": [],
                 "scores": [],
-                "liqibang": tile_manager.liqibang
+                "liqibang": 0
             }
         }, id=-1)
 
@@ -850,34 +824,13 @@ def convert_image_data(image_data):
                 }
             }, id=-1)
 
-        # state_msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.ActionPrototype", {
-        #     "step": step + 2,
-        #     "name": "ActionDealTile",
-        #     "data": {
-        #         "seat": seat,
-        #         "leftTileCount": getattr(tile_manager, "leftTileCount", 0),
-        #         "liqi": {
-        #             "score": getattr(tile_manager, "liqiScore", 24000),
-        #             "liqibang": getattr(tile_manager, "liqibang", 0),
-        #             "seat": 0,
-        #             "failed": False
-        #         },
-        #         "tile": "",
-        #         "doras": [],
-        #         "zhenting": False,
-        #         "tingpais": [],
-        #         "tileState": 0,
-        #         "tileIndex": 0
-        #     }
-        # }, id=-1)
-
         tile_manager.step = step + 2
         msgs.extend([mopai_msg, discard_msg])
         return msgs
 
     elif state == "GameEnd":
         tile_manager.end_game()
-        msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.ActionPrototype", {
+        msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.NotifyGameEndResult", {
             "step": -1,
             "name": "ActionHule",
             "data": {}

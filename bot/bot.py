@@ -104,9 +104,9 @@ class BotMjai(Bot):
             except:
                 import riichi as libriichi
             self.mjai_bot = libriichi.mjai.Bot(engine, self.seat)
-        elif mode == GameMode.MJ3P:
-            import libriichi3p
-            self.mjai_bot = libriichi3p.mjai.Bot(engine, self.seat)
+        # elif mode == GameMode.MJ3P:
+        #     import libriichi3p
+        #     self.mjai_bot = libriichi3p.mjai.Bot(engine, self.seat)
         else:
             raise BotNotSupportingMode(mode)          
             

@@ -17,11 +17,11 @@ class TileManager:
         self.cancel_chipongang = []
         self.can_chipongang = None  # 存储待处理的吃/碰/杠操作
 
-        self.toDiscard = []         # 立直后待弃牌列表
         self.justLiqi = False       # 是否刚刚立直
         self.can_liqi = False
         self.zhenting = False         # 我方是否振听
         self.tingpai = []             # 我方听牌列表
+        self.liqiTodeal = []  # 立直后的限定出牌
 
         # 新增属性
         self.current_operationList = []  # 当前可操作牌列表（例如吃碰杠的组合）
@@ -147,40 +147,71 @@ class TileManager:
                     counts[tile3] += 1
         return False
 
-    def compute_tingpai(self):
-        """
-        计算某个座位（一般为己方）的听牌情况。
-        思路：对候选牌（1m～9m, 1p～9p, 1s～9s）尝试加入当前 13 张牌，
-        如果形成 14 张牌后能和，则该牌是待听牌。
-        注意：此处假设传入的 hand 为己方手牌（13张牌），实际情况可能需要调整。
-        """
+    def tileCount(self, tile):
+        total = 0
+        for i in range(4):
+            total += self.melds[i].count(tile)
+            total += self.discards[i].count(tile)
+        total += self.hands.count(tile)
+        return total
+    def count_tingpaiList(self):
+
+        self.tingpai = []  # 重新初始化听牌列表
+        hand_copy = self.hands.copy()
+        for meld in self.melds[self.Myseat]:
+            hand_copy.remove(meld)
+
+        for i in hand_copy:
+              # 复制手牌
+            hand_copy_2 = self.hands.copy()
+            hand_copy_2.remove(i)  # 在副本上移除 i
+
+            waiting = self.compute_tingpai(hand_copy_2)  # 传入副本
+            if waiting:
+                self.tingpai.append({
+                    "tile": i,
+                    "zhenting": self.zhentingif(i),
+                    "infos": [{
+                        "tile": j,
+                        "haveyi": True,
+                        "count": 4-self.tileCount(j),
+                        "fu": 30,
+                        "biaoDoraCount": len(self.doras),
+                        "countZimo": 2,
+                        "fuZimo": 20,
+                        "yiman": False,
+                        "yimanZimo": False
+                    } for j in waiting]  # 这里填充所有可能的听牌信息
+                })
+        return
+    def zhentingif(self,tile):
+        if self.zhenting:
+            return True
+        else:
+            if tile in self.discards[self.Myseat]:
+                return True
+        return False
+
+    def compute_tingpai(self,hand):
         waiting = []
         candidate_tiles = []
         # 这里只处理数字牌；扩展时可加入风牌和箭牌
         for suit in ["m", "p", "s"]:
             for num in range(1, 10):
                 candidate_tiles.append(f"{num}{suit}")
+
         # 假设当前 hand 为 self.hands 中少一张（己方已出一张），或者另外保存待摸牌的 13 张
-        current_hand = self.hands.copy()
+        current_hand = hand.copy()
+
         if len(current_hand) != 13:
             # 为示例，若手牌不为 13 张则返回空
             return []
+
         for tile in candidate_tiles:
             new_hand = current_hand + [tile]
             if self.is_hupai(new_hand):
                 waiting.append(tile)
 
-        for i in waiting:
-            self.tingpai.append({
-                        "tile": i,
-                        "haveyi": True,
-                        "count": random.randint(1, 2),
-                        "fu": 30,
-                        "biaoDoraCount": 3,
-                        "countZimo": 1,
-                        "fuZimo": 30,
-                        "yiman": False,
-                        "yimanZimo": False})
         return waiting
 
 
@@ -266,18 +297,36 @@ class TileManager:
             return
 
         elif data["state"] == "MyAction":
-            self.handle_self_discard(data["tile"], data["getTile"])
+
             if self.player[self.Myseat].get("is_liqi", False):
                 data["state"] = "My_Liqi"
+                return
+
+            if data["getTile"] in ["0s","0p","0m"] :
+                self.myDoras.append(data["getTile"])
+
+            if data["tile"] in ["0s","0p","0m"] :
+                self.myDoras.remove(data["tile"])
+
+            self.handle_self_discard(data["tile"], data["getTile"])
+            self.count_tingpaiList()
+            if len(self.tingpai) > 0:
+                self.can_liqi = True
+                self.zhentingif(data["getTile"])
+
 
             return
 
         elif data["state"] == "MyAction_Chipongang":
-            self.handle_self_chipongang(data["tile"], data["operation"])
+            self.handle_self_chipongang(data)
             return
 
         elif data["state"] == "MyAction_Liqi":
             self.declare_liqi(data["seat"])
+            self.liqiTodeal = data["tile_list"]
+
+            self.count_tingpaiList()
+
 
             return
 
@@ -336,7 +385,7 @@ class TileManager:
             print(f"未持有 {tile}，当前手牌: {self.hands}")
             return
 
-        self.tingpai = self.compute_tingpai()
+        self.tingpai = self.compute_tingpai(self.hands)
         self.is_furiten()
 
 
@@ -344,8 +393,11 @@ class TileManager:
 
         self.can_liqi = self.LiqiJudge()
 
+    def handle_self_chipongang(self, data):
+        if data["operation"]["type"] in [4 , 5, 6]:
+            self.doras = data["doras"]
 
-
+        return
 
 
     def clear_operations(self):
