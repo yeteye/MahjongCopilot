@@ -1,0 +1,427 @@
+import json
+import random
+
+
+class TileManager:
+    def __init__(self, player_id):
+        self.player_id = player_id  # 我方玩家 ID
+        self.Myseat = None            # 我方座位号
+        self.hands = []             # 我方手牌
+        self.doras = []             # 宝牌指示牌
+
+        self.myDoras = []
+
+        self.melds = {i: [] for i in range(4)}  # 各玩家的明牌（吃/碰/杠）
+        self.discards = {i: [] for i in range(4)}  # 各玩家的弃牌
+        self.seat_map = {}          # 玩家 ID 到座位号的映射
+        self.cancel_chipongang = []
+        self.can_chipongang = None  # 存储待处理的吃/碰/杠操作
+
+        self.toDiscard = []         # 立直后待弃牌列表
+        self.justLiqi = False       # 是否刚刚立直
+        self.can_liqi = False
+        self.zhenting = False         # 我方是否振听
+        self.tingpai = []             # 我方听牌列表
+
+        # 新增属性
+        self.current_operationList = []  # 当前可操作牌列表（例如吃碰杠的组合）
+        self.step = 0                    # 当前步骤，方便消息 step 自增
+        self.player = {}                 # 存储每个座位的玩家信息，包括立直等
+        self.scores = [25000, 25000, 25000, 25000]  # 各玩家得分
+        self.liqibang = 0                # 全局立直棒数量
+        self.leftTileCount = 69          # 剩余牌数
+        self.liqiScore = 24000           # 立直时对应分数
+
+    def initialize_game(self, data):
+        """ 初始化游戏状态 """
+        # 构造座位映射：seat -> playerId
+        self.seat_map = {seat: player for seat, player in enumerate(data["seatList"])}
+        self.cancel_chipongang = []
+        # 设置我方座位号
+        self.Myseat = next(seat for seat, player in self.seat_map.items() if player == self.player_id)
+        self.hands = data["tiles"]
+        self.doras = data["doras"]
+        self.melds = {i: [] for i in range(4)}
+        self.discards = {i: [] for i in range(4)}
+
+        self.can_chipongang = None
+        self.justLiqi = False
+
+        self.liqiTodeal = []      #立直后的限定出牌
+        self.zhenting = False  # 我方是否振听
+        self.tingpai = []  # 我方听牌列表
+
+        self.current_operationList = []
+        self.step = 0
+        self.liqibang = 0  # 每局开始重置立直棒数量
+        # 初始化每个玩家的默认状态（扩展字段：听牌、是否立直、振听等）
+        for seat, player in self.seat_map.items():
+
+            self.player[seat] = {
+                "accountId": player,
+                "tingpai": [],
+                "is_liqi": False,
+                "liqi": False,
+                "zhenting": False
+            }
+
+        print("游戏初始化完成")
+
+    def is_furiten(self):
+        """
+        参数：
+          waiting_tiles: list[str]，己方当前可能和牌的候选牌（听牌列表）
+          self_discards: list[str]，己方已经弃掉的牌列表
+        说明：
+          根据日本麻将规则，如果玩家自己弃过自己待听（赢牌）的牌，则视为振听。
+          此函数简单判断听牌列表中是否有任一牌已经被弃出。
+        """
+        waiting_tiles = [entry["tile"] for entry in self.tingpai]
+
+        self_discards = self.discards[self.Myseat]
+
+        for tile in waiting_tiles:
+            if tile in self_discards:
+                self.zhenting = True
+                break
+            else:
+                self.zhenting = False
+
+        return
+
+    def is_hupai(self, hand):
+        """
+        判断 14 张牌的 hand 是否和牌（日本麻将和牌判断的简化示例）
+        采用一般形：4个面子 + 1雀头；同时也考虑 7对子形式。
+        这里只处理数字牌，不处理字牌和特殊役，作为示例。
+        """
+        if len(hand) != 14:
+            return False
+
+        # 7对子判断：如果 hand 中有7个不同牌且每个牌至少出现2次
+        counts = {}
+        for tile in hand:
+            counts[tile] = counts.get(tile, 0) + 1
+        if len([tile for tile, cnt in counts.items() if cnt >= 2]) == 7:
+            return True
+
+        # 尝试从 hand 中选出一对雀头，然后递归判断剩下是否能拆分成4个面子（三张一组，刻子或顺子）
+        for tile in counts:
+            if counts[tile] >= 2:
+                counts[tile] -= 2
+                if self._can_form_melds(counts):
+                    counts[tile] += 2
+                    return True
+                counts[tile] += 2
+        return False
+
+    def _can_form_melds(self, counts):
+        """ 递归判断 counts 中的牌能否拆分成面子（刻子或顺子） """
+        # 如果所有牌都拆分完，则和牌成立
+        if all(cnt == 0 for cnt in counts.values()):
+            return True
+        # 找到第一个还有牌的 tile
+        for tile in sorted(counts.keys()):
+            if counts[tile] > 0:
+                break
+            # 尝试刻子
+            if counts[tile] >= 3:
+                counts[tile] -= 3
+                if self._can_form_melds(counts):
+                    return True
+                counts[tile] += 3
+            # 尝试顺子（仅适用于数字牌）
+            if len(tile) == 2 and tile[0].isdigit():
+                num = int(tile[0])
+                suit = tile[1]
+                tile2 = f"{num + 1}{suit}"
+                tile3 = f"{num + 2}{suit}"
+                if tile2 in counts and tile3 in counts and counts[tile2] > 0 and counts[tile3] > 0:
+                    counts[tile] -= 1
+                    counts[tile2] -= 1
+                    counts[tile3] -= 1
+                    if self._can_form_melds(counts):
+                        return True
+                    counts[tile] += 1
+                    counts[tile2] += 1
+                    counts[tile3] += 1
+        return False
+
+    def compute_tingpai(self):
+        """
+        计算某个座位（一般为己方）的听牌情况。
+        思路：对候选牌（1m～9m, 1p～9p, 1s～9s）尝试加入当前 13 张牌，
+        如果形成 14 张牌后能和，则该牌是待听牌。
+        注意：此处假设传入的 hand 为己方手牌（13张牌），实际情况可能需要调整。
+        """
+        waiting = []
+        candidate_tiles = []
+        # 这里只处理数字牌；扩展时可加入风牌和箭牌
+        for suit in ["m", "p", "s"]:
+            for num in range(1, 10):
+                candidate_tiles.append(f"{num}{suit}")
+        # 假设当前 hand 为 self.hands 中少一张（己方已出一张），或者另外保存待摸牌的 13 张
+        current_hand = self.hands.copy()
+        if len(current_hand) != 13:
+            # 为示例，若手牌不为 13 张则返回空
+            return []
+        for tile in candidate_tiles:
+            new_hand = current_hand + [tile]
+            if self.is_hupai(new_hand):
+                waiting.append(tile)
+
+        for i in waiting:
+            self.tingpai.append({
+                        "tile": i,
+                        "haveyi": True,
+                        "count": random.randint(1, 2),
+                        "fu": 30,
+                        "biaoDoraCount": 3,
+                        "countZimo": 1,
+                        "fuZimo": 30,
+                        "yiman": False,
+                        "yimanZimo": False})
+        return waiting
+
+
+
+    def get_effective_tile(self, tile):
+        """ 将宝牌显示的 '0s' 转换为实际牌，例如 '0s' → '5s' """
+        if tile.startswith("0"):
+            return "5" + tile[1:]
+        return tile
+
+    def get_possible_actions(self, tile):
+        """
+        检测吃、碰、杠操作，返回所有可能的操作（不进行选择）。
+        吃操作仅适用于数字牌（m, p, s）。
+        """
+        actions = []
+        effective_tile = self.get_effective_tile(tile)
+
+
+        # 碰：如果手中有两张相同的牌
+        if self.hands.count(effective_tile) >= 2:
+            actions.append({
+                "type": 3,  # 3 表示碰
+                "pai": effective_tile,
+                "combination": [effective_tile, effective_tile, effective_tile]
+            })
+
+        # 杠：如果手中有三张相同的牌
+        if self.hands.count(effective_tile) == 3:
+            actions.append({
+                "type": 5,  # 5 表示大明杠
+                "pai": effective_tile,
+                "combination": [effective_tile, effective_tile, effective_tile, effective_tile]
+            })
+
+        # 吃：仅适用于数字牌（m, p, s）
+        if len(effective_tile) > 1 and effective_tile[1] in "mps":
+            try:
+                num = int(effective_tile[0])
+            except ValueError:
+                num = 0
+            suit = effective_tile[1]
+            chi_combinations = [
+                {f"{num-2}{suit}", f"{num-1}{suit}"},
+                {f"{num-1}{suit}", f"{num+1}{suit}"},
+                {f"{num+1}{suit}", f"{num+2}{suit}"}
+            ]
+            for chi_set in chi_combinations:
+                if chi_set.issubset(set(self.hands)):
+                    actions.append({
+                        "type": 2,  # 2 表示吃
+                        "pai": effective_tile,
+                        "combination": list(chi_set)
+                    })
+        # 将检测到的操作更新到当前操作列表中
+        if actions:
+            self.can_chipongang = True
+            self.current_operationList = actions
+        else:
+            self.can_chipongang = False
+
+        return
+
+    def handle_discard(self, data):
+
+        if data["state"] in ["GameStart", "GameEnd", "Other_cancel"]:
+            return
+
+        elif data["state"] == "MyAction_cancel":
+            #己方取消吃碰杠，但是又轮到己方行动，那么就是"MyAction_cancel"+”"MyAction"连发
+            self.clear_operations()
+            return
+
+        elif data["state"] == "Discard":
+            seat = data["seat"]
+            tile = data["tile"]
+
+            self.discards[seat].append(tile)
+            # 对手出牌时，检测我方是否有可操作牌（吃、碰、杠）
+            self.get_possible_actions(tile)
+            # 如果没有可操作动作，则清空当前操作列表
+            self.clear_operations()
+            return
+
+        elif data["state"] == "MyAction":
+            self.handle_self_discard(data["tile"], data["getTile"])
+            if self.player[self.Myseat].get("is_liqi", False):
+                data["state"] = "My_Liqi"
+
+            return
+
+        elif data["state"] == "MyAction_Chipongang":
+            self.handle_self_chipongang(data["tile"], data["operation"])
+            return
+
+        elif data["state"] == "MyAction_Liqi":
+            self.declare_liqi(data["seat"])
+
+            return
+
+        elif data["state"] == "Other_Chipongang":
+            # 对手执行吃/碰/杠操作时，更新对手的明牌区
+            seat = data["seat"]
+            operation = data.get("operation", {})
+
+            meld = {
+                "type": operation.get("type"),
+                "combination": operation.get("combination"),
+                "froms": operation.get("form")
+            }
+
+            if operation["type"] in [4,5,6]: #对手大明杠/暗杠/加杠
+                self.doras.append(data["dora"])
+
+            self.melds[seat].append(meld)
+            # print(f"🚀 玩家 {seat} 明牌更新: {self.melds[seat]}")
+            # 返回相应的通知消息或空（视业务逻辑而定）
+            tile = data["tile"]
+            actions = self.get_possible_actions(tile)
+            if actions:
+                self.can_chipongang = {
+                    "seat": self.Myseat,
+                    "operationList": actions
+                }
+
+                return
+
+            return
+
+        elif data["type"] == "Other_liqi":
+            self.declare_liqi(data["seat"])
+            return
+        return
+
+    def LiqiJudge(self):
+        """ 判断是否可以立直 """
+        # 无吃碰杠，且有听牌，且未振听
+        if self.melds:
+            return False
+        if len(self.tingpai) > 0:
+            if not self.zhenting:
+                return True
+
+        return False
+
+    def handle_self_discard(self, tile, gettile, tsumogiri=False):
+        """ 处理己方出牌：从手牌中移除，并更新弃牌区 """
+        self.hands.append(gettile)
+
+        if tile in self.hands:
+            self.hands.remove(tile)
+        else:
+            print(f"未持有 {tile}，当前手牌: {self.hands}")
+            return
+
+        self.tingpai = self.compute_tingpai()
+        self.is_furiten()
+
+
+        self.discards[self.Myseat].append(tile)
+
+        self.can_liqi = self.LiqiJudge()
+
+
+
+
+
+    def clear_operations(self):
+        """ 清空待处理操作和当前操作列表 """
+        self.can_chipongang = None
+        self.current_operationList = []
+
+    def get_ChiPengGang_flag(self):
+        """ 返回是否有吃碰杠操作标志，依据当前操作列表 """
+        return len(self.current_operationList)
+
+    def get_player_info(self, account_id):
+        """
+        获取玩家的相关信息，如果已存在则返回已设置的，否则返回默认信息。
+        供 generate_auth_game_msg 调用。
+        """
+        for seat, info in self.player.items():
+            if info.get("accountId") == account_id:
+                return {
+                    "avatarId": 400101,
+                    "nickname": f"VirtualPlayer{seat+1}",
+                    "score": 100 * (seat + 1)
+                }
+        return {
+            "avatarId": 400101,
+            "nickname": f"Player_{account_id}",
+            "score": 100
+        }
+
+    def declare_liqi(self, seat):
+        """
+        声明立直操作：
+          - 更新该玩家的立直状态；
+          - 若该玩家之前未立直，则全局立直棒数量加 1。
+        """
+        self.justLiqi = True
+
+        if not self.player[seat].get("is_liqi", False):
+            self.player[seat]["is_liqi"] = True
+            self.liqibang += 1
+
+        self.liqi_msg = self.get_liqi_msg()
+
+        # if self.player[seat].get("zhenting", False):
+        #     self.player[seat]["zhenting"] = False
+
+
+    def get_liqi_msg(self):
+        liqi_msg = []
+        for i in range(4):
+            if self.player[i].get("is_liqi", False):
+                liqi_msg.append({
+                    "score": 24000,
+                    "liqibang": self.liqibang,
+                    "seat": i,
+                    "failed": False})
+        return liqi_msg
+
+    def cancel_liqi(self, seat):
+        """
+        取消立直状态：
+          - 更新该玩家的立直状态；
+          - 此处规则可能不允许取消后减少立直棒，这里仅输出提示信息。
+        """
+        if self.player.get(seat, {}).get("is_liqi", False):
+            self.player[seat]["is_liqi"] = False
+            print(f"🔕 玩家 {seat} 取消立直。")
+
+    def end_game(self):
+        """ 清空所有牌相关状态，重置为初始空值 """
+        self.hands = []
+        self.doras = []
+        self.melds = {i: [] for i in range(4)}
+        self.discards = {i: [] for i in range(4)}
+        self.clear_operations()
+        print("🔄 游戏结束，已清空所有牌局状态")
+
+# 提供全局实例
+tile_manager = TileManager(player_id=17457800)

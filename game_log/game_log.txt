@@ -11,6 +11,8 @@ LiqiMsg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "
 LiqiMsg: {"id": 4, "type": "MsgType.REQ", "method": ".lq.FastTest.fetchGamePlayerState", "data": {}}
 ==================================================
 LiqiMsg: {"id": 4, "type": "MsgType.RES", "method": ".lq.FastTest.fetchGamePlayerState", "data": {"stateList": ["READY", "READY", "READY", "READY"]}}
+
+
 ==================================================
 LiqiMsg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "data": {"step": 1, "name": "ActionNewRound", "data": {"tiles": ["8p", "5m", "7s", "9m", "7s", "5s", "7m", "0m", "4z", "2p", "3p", "7m", "4p"], "scores": [25000, 25000, 25000, 25000], "leftTileCount": 69, "doras": ["7m"], "opens": [{"seat": 0, "tiles": [], "count": []}, {"seat": 1, "tiles": [], "count": []}, {"seat": 2, "tiles": [], "count": []}, {"seat": 3, "tiles": [], "count": []}], "sha256": "e0b876b10ae9f1661f934039f79bdc8cb5ee1b3b9ae52f6a0d842b2a79b2a8a6", "chang": 0, "ju": 0, "ben": 0, "dora": "", "liqibang": 0, "tingpais0": [], "tingpais1": [], "al": false, "md5": "", "juCount": 0, "fieldSpell": 0}}}
 ==================================================

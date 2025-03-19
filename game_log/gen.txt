@@ -1,0 +1,151 @@
+LiqiMsg: {
+    "id": -1,
+    "state": "GameStart",
+    "seatList": [1, 2, 3, 17457800],
+    "tiles": ["2m", "3p", "4p", "2z", "4z", "6s", "5s", "9m", "1m", "7p", "2p", "3s", "2s", "5p"],
+    "doras": ["4s"]
+}
+==================================================
+LiqiMsg: {
+    "id": -1,
+    "type": "MsgType.NOTIFY",
+    "method": ".lq.ActionPrototype",
+    "data": {
+        "step": 1,
+        "name": "ActionDiscardTile",
+        "data": {
+            "seat": 1,
+            "tile": "9m",
+            "isLiqi": false,
+            "moqie": false,
+            "zhenting": false,
+            "tingpais": [],
+            "doras": [],
+            "isWliqi": false,
+            "tileState": 0,
+            "revealed": false,
+            "scores": [],
+            "liqibang": 0
+        }
+    }
+}
+==================================================
+LiqiMsg: {
+    "id": -1,
+    "type": "MsgType.NOTIFY",
+    "method": ".lq.ActionPrototype",
+    "data": {
+        "step": 2,
+        "name": "ActionDiscardTile",
+        "data": {
+            "seat": 2,
+            "tile": "4p",
+            "isLiqi": false,
+            "moqie": false,
+            "zhenting": false,
+            "tingpais": [],
+            "doras": [],
+            "isWliqi": false,
+            "tileState": 0,
+            "revealed": false,
+            "scores": [],
+            "liqibang": 0
+        }
+    }
+}
+==================================================
+LiqiMsg: {
+    "id": -1,
+    "type": "MsgType.NOTIFY",
+    "method": ".lq.ActionPrototype",
+    "data": {
+        "step": 3,
+        "name": "ActionChiPengGang",
+        "data": {
+            "seat": 3,
+            "tiles": ["2p", "3p", "4p"],
+            "froms": [3, 3, 2],
+            "tileStates": [0, 0],
+            "type": 0,
+            "zhenting": false,
+            "tingpais": [],
+            "scores": [],
+            "liqibang": 0
+        }
+    }
+}
+==================================================
+LiqiMsg: {
+    "id": -1,
+    "type": "MsgType.NOTIFY",
+    "method": ".lq.ActionPrototype",
+    "data": {
+        "step": 4,
+        "name": "ActionDiscardTile",
+        "data": {
+            "seat": 3,
+            "tile": "2m",
+            "isLiqi": false,
+            "moqie": false,
+            "zhenting": false,
+            "tingpais": [],
+            "doras": [],
+            "isWliqi": false,
+            "tileState": 0,
+            "revealed": false,
+            "scores": [],
+            "liqibang": 0
+        }
+    }
+}
+==================================================
+LiqiMsg: {
+    "id": -1,
+    "type": "MsgType.NOTIFY",
+    "method": ".lq.ActionPrototype",
+    "data": {
+        "step": 5,
+        "name": "ActionDiscardTile",
+        "data": {
+            "seat": 0,
+            "tile": "1m",
+            "isLiqi": false,
+            "moqie": false,
+            "zhenting": false,
+            "tingpais": [],
+            "doras": [],
+            "isWliqi": false,
+            "tileState": 0,
+            "revealed": false,
+            "scores": [],
+            "liqibang": 0
+        }
+    }
+}
+==================================================
+LiqiMsg: {
+    "id": -1,
+    "type": "MsgType.NOTIFY",
+    "method": ".lq.ActionPrototype",
+    "data": {
+        "step": 6,
+        "name": "ActionChiPengGang",
+        "data": {
+            "seat": 3,
+            "tiles": ["1m", "2m", "3m"],
+            "froms": [3, 3, 0],
+            "tileStates": [0, 0],
+            "type": 0,
+            "zhenting": false,
+            "tingpais": [],
+            "scores": [],
+            "liqibang": 0
+        }
+    }
+}
+==================================================
+LiqiMsg: {
+    "id": -1,
+    "state": "GameEnd"
+}
+==================================================

@@ -96,7 +96,9 @@ def process_new_liqi_msgs():
                         continue  # **继续监听新的 `game_log.txt` 更新**
 
                     # 处理 reaction
+                    print("now processing liqi_msg :", liqi_msg)
                     reaction = _manager.my_api(liqi_msg)
+                    print("right")
                     if reaction:
                         prompt = get_action_prompt(reaction)  # 获取行动提示
                         print(f"行动提示: {prompt}")

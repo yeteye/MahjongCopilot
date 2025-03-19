@@ -4,7 +4,7 @@ import threading
 
 from get_react import add_liqi_msg_to_log,react_api  # ✅ **导入 `add_liqi_msg_to_log`**
 
-WHOLE_GAME_LOG_PATH = "game_log/simulate.txt"  # **完整游戏日志**
+WHOLE_GAME_LOG_PATH = "game_log/my_simulate_gen_info.txt"  # **完整游戏日志**
 DELAY_BETWEEN_MESSAGES = 0.05  # **每条消息之间的延迟（秒）**
 
 

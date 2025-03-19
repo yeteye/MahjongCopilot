@@ -29,6 +29,7 @@ LiqiMsg: {"id": -1, "type": "MsgType.NOTIFY", "method": ".lq.ActionPrototype", "
 LiqiMsg: {"id": 230, "type": "MsgType.REQ", "method": ".lq.FastTest.fetchGamePlayerState", "data": {}}
 ==================================================
 LiqiMsg: {"id": 230, "type": "MsgType.RES", "method": ".lq.FastTest.fetchGamePlayerState", "data": {"stateList": ["READY", "READY", "READY", "READY"]}}
+
 ==================================================
 LiqiMsg: {"id": 234, "type": "MsgType.REQ", "method": ".lq.FastTest.inputOperation", "data": {"type": 1, "tile": "1s", "timeuse": 5, "index": 0, "cancelOperation": false, "moqie": false, "tileState": 0, "changeTiles": [], "tileStates": [], "gapType": 0}}
 ==================================================

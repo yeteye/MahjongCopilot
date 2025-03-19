@@ -210,6 +210,11 @@ class GameState:
             if 'data' in liqi_data:
                 if 'operation' in liqi_data['data']:
                     self.last_operation = liqi_data['data']['operation']
+
+                    # print(liqi_data['data']['operation']['seat'])
+                    #
+                    # print(self.seat)
+
                     if liqi_data['data']['operation']['seat'] != self.seat:
                         LOGGER.warning("operation seat %s != self.seat %s", liqi_data['data']['operation']['seat'], self.seat)
                     if 'operationList' not in liqi_data['data']['operation']:
