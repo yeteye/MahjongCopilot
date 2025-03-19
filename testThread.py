@@ -17,7 +17,7 @@ def tail_game_log():
     global last_file_size  # **使用全局变量**
 
     while True:
-        print("iscalled")
+        # print("iscalled")
         if not os.path.exists(WHOLE_GAME_LOG_PATH):
             time.sleep(1)
             continue  # **等待文件创建后再处理**
@@ -50,7 +50,7 @@ def process_new_liqi_msgs(new_lines):
             json_str = line
 
         try:
-            print("处理消息: ", json_str)
+            # print("处理消息: ", json_str)
             liqi_msg = json.loads(json_str)  # **解析 JSON**
             add_liqi_msg_to_log(liqi_msg)  # **调用 API 添加到 `game_log.txt`**
             time.sleep(DELAY_BETWEEN_MESSAGES)  # **模拟延迟**
@@ -64,6 +64,7 @@ def process_new_liqi_msgs(new_lines):
 
 
 def main():
+    print("iscalled")
     react_thread = threading.Thread(target=react_api, daemon=True)
     react_thread.start()
 
