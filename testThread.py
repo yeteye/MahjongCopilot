@@ -2,7 +2,7 @@ import time
 import json
 import threading
 import os
-from prompt_ui import update_ui, PromptUI
+from prompt_ui import PromptUI
 from get_react import add_liqi_msg_to_log, react_api
 
 WHOLE_GAME_LOG_PATH = "game_log/my_simulate_gen_info.txt"
@@ -64,7 +64,7 @@ def process_new_liqi_msgs(new_lines):
 
 
 def main():
-    print("iscalled")
+    # print("iscalled")
     react_thread = threading.Thread(target=react_api, daemon=True)
     react_thread.start()
 

@@ -1,7 +1,7 @@
 import json
 from enum import Enum
 from liqi import MsgType
-
+import ast
 #待优化
 
 # 定义牌符号对应的中文名称字典
@@ -18,8 +18,21 @@ tile_mapping = {
 
 }
 
+MJAI_TILE_2_UNICODE = {      # https://en.wikipedia.org/wiki/Mahjong_Tiles_(Unicode_block)
+    '1m': '🀇', '2m': '🀈', '3m': '🀉', '4m': '🀊', '5mr': '🀋',
+    '5m': '🀋', '6m': '🀌', '7m': '🀍', '8m': '🀎', '9m': '🀏',
+    '1p': '🀙', '2p': '🀚', '3p': '🀛', '4p': '🀜', '5pr': '🀝',
+    '5p': '🀝', '6p': '🀞', '7p': '🀟', '8p': '🀠', '9p': '🀡',
+    '1s': '🀐', '2s': '🀑', '3s': '🀒', '4s': '🀓', '5sr': '🀔',
+    '5s': '🀔', '6s': '🀕', '7s': '🀖', '8s': '🀗', '9s': '🀘',
+    'E': '🀀', 'S': '🀁', 'W': '🀂', 'N': '🀃',
+    'P': '🀆', 'F': '🀅', 'C': '🀄',
+    '?': '🀫'
+}
+
 action_mapping = {
-        'reach': '立直', 'pon': '碰', 'kan_select':'杠',
+        'reach': '立直', 'pon': '碰', 'daiminkan':'杠',
+        'ankan': '暗杠', 'kakan': '加杠',
         'chi_low': '吃-低', 'chi_mid': '吃-中', 'chi_high': '吃-高',
         'hora': '和牌', 'ryukyoku': '流局', 'none': '跳过', 'nukidora':'拔北'
 }
@@ -55,7 +68,15 @@ def translate_reaction(reaction: dict):
                        f" 候选操作：{options_text}。")
         return description
     elif rtype == 'hora':
-        return
+        return "和牌"
+    elif rtype == 'ryukyoku':
+        return "荒牌流局"
+    elif rtype == 'ankan':
+        return "暗杠"
+    elif rtype == 'kakan':
+        return "加杠"
+    elif rtype == 'reach':
+        return "立直"
     elif rtype == "none":
         meta = reaction.get("meta", {})
         shanten = meta.get("shanten", "未知")
@@ -74,7 +95,8 @@ def translate_reaction(reaction: dict):
         return description
     else:
         return "未知的动作类型"
-
+def convert_hand_to_unicode(tile_code):
+    return MJAI_TILE_2_UNICODE.get(tile_code, tile_code)
 def get_action_prompt(reaction: dict) -> str:
     """
     仅提取 reaction 的关键信息，告诉用户建议的行动。
@@ -85,14 +107,37 @@ def get_action_prompt(reaction: dict) -> str:
     if rtype == "dahai":
         actor = reaction.get("actor")
         pai = reaction.get("pai")
+        converted = convert_hand_to_unicode(pai)
         pai_cn = tile_to_chinese(pai)
         tsumogiri = reaction.get("tsumogiri")
         tsumo_text = "摸切" if tsumogiri else "非摸切"
-        return f"建议玩家 {actor} 出牌：{pai_cn}（{tsumo_text}）。"
+        return f"建议出牌：{pai_cn}{converted}（{tsumo_text}）。"
     elif rtype == "none":
         return "建议不采取行动。"
+    elif rtype == 'hora':
+        return "和牌"
+    elif rtype == 'ryukyoku':
+        return "荒牌流局"
+    elif rtype == 'ankan':
+        return "暗杠"
+    elif rtype == 'kakan':
+        return "加杠"
+    elif rtype == 'reach':
+        return "立直"
+    elif rtype == 'pon':
+        return "碰"
+    elif rtype == 'chi_low':
+        return "吃-低"
+    elif rtype == 'chi_mid':
+        return "吃-中"
+    elif rtype == 'chi_high':
+        return "吃-高"
+    elif rtype == 'chi':
+        return "吃"
+    elif rtype == 'daiminkan':
+        return "大明杠"
     else:
-        return "无法识别建议的行动。"
+        return str(reaction)
 
 def cn_api(reaction:str):
     reactions = json.loads(reaction)
@@ -128,6 +173,3 @@ def main():
         except Exception as e:
             print("处理 reaction 时出错：", e)
 
-if __name__ == "__main__":
-    reaction = '{"type": "dahai", "actor": 1, "pai": "1s", "tsumogiri": true, "meta": {"q_values": [-9.254235, -8.504512, -6.8469095, -4.099716, -2.3322632, -8.218817, 0.094815016, -9.583127, -9.100557], "mask_bits": 51539885136, "is_greedy": true, "batch_size": 1, "eval_time_ns": 71805400, "shanten": 0, "at_furiten": false}, "meta_options": [["1s", 0.9049614589984416], ["4p", 0.07990305921214041], ["3p", 0.013644838797431244], ["2p", 0.0008747368681638228], ["5p", 0.00022185313724923256], ["7m", 0.00016672081033922202], ["5pr", 9.186091310538715e-05], ["5m", 7.877515214538084e-05], ["5mr", 5.669611098395818e-05]]}'
-    cn_api(reaction)

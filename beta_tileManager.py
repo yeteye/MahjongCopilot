@@ -5,7 +5,7 @@ import random
 class TileManager:
     def __init__(self, player_id):
         self.player_id = player_id  # 我方玩家 ID
-        self.Myseat = None            # 我方座位号
+        self.Myseat = 0           # 我方座位号
         self.hands = []             # 我方手牌
         self.doras = []             # 宝牌指示牌
 
@@ -18,6 +18,7 @@ class TileManager:
 
         self.can_chipongang = False  # 存储待处理的吃/碰/杠操作
 
+        self.forbiden = []
         self.is_liqi = False          # 我方是否立直
         self.justLiqi = False       # 是否刚刚立直
         self.can_liqi = False
@@ -25,6 +26,7 @@ class TileManager:
         self.zhenting = False         # 我方是否振听
         self.tingpai = []             # 我方听牌列表
         self.liqiTodeal = []  # 立直后的限定出牌
+        self.lastChi = []
 
         # 新增属性
         self.current_operationList = []  # 当前可操作牌列表（例如吃碰杠的组合）
@@ -47,6 +49,8 @@ class TileManager:
         self.melds = {i: [] for i in range(4)}
         self.discards = {i: [] for i in range(4)}
 
+        self.lastChi = []
+        self.forbiden = []
         self.can_chipongang = False
         self.justLiqi = False
 
@@ -255,7 +259,7 @@ class TileManager:
             })
 
         # 吃：仅适用于数字牌（m, p, s）
-        if len(effective_tile) > 1 and effective_tile[1] in "mps":
+        if len(effective_tile) > 1 and (effective_tile[1] in "mps"):
             try:
                 num = int(effective_tile[0])
             except ValueError:
@@ -268,12 +272,16 @@ class TileManager:
             ]
             hand_copy = self.hands.copy()
             for i in self.melds[self.Myseat]:
+                print("i ",i)
                 hand_copy.remove(i)
+            print("hand_copy ",hand_copy)
 
             chi = []
             for chi_set in chi_combinations:
                 if chi_set.issubset(set(hand_copy)):  # 确保 chi_set 在手牌中
-                    chi.append(list(chi_set))
+                    chi.append(list(chi_set)[0])
+                    chi.append(list(chi_set)[1])
+            print("chi ",chi)
 
             if len(chi) == 2:
                 actions.append({
@@ -283,6 +291,7 @@ class TileManager:
                     "gapType": 0,
                     "combination": [f"{chi[0]}|{chi[1]}"]
                 })
+                self.lastChi.append(effective_tile)
             elif len(chi) == 4:
                 actions.append({
                     "type": 2,  # 2 表示吃
@@ -291,6 +300,7 @@ class TileManager:
                     "gapType": 0,
                     "combination": [f"{chi[0]}|{chi[1]}", f"{chi[2]}|{chi[3]}"]
                 })
+                self.lastChi.append(effective_tile)
             elif len(chi) == 6:
                 actions.append({
                     "type": 2,  # 2 表示吃
@@ -303,6 +313,7 @@ class TileManager:
                         f"{chi[4]}|{chi[5]}"
                     ]
                 })
+                self.lastChi.append(effective_tile)
 
         # 将检测到的操作更新到当前操作列表中
         if len(actions)>0:
@@ -314,6 +325,9 @@ class TileManager:
         return
 
     def handle_discard(self, data):
+
+        self.current_operationList = []
+        # self.can_chipongang = False
 
         if data["state"] in ["GameStart", "GameEnd", "Other_cancel"]:
             return
@@ -358,6 +372,8 @@ class TileManager:
 
         elif data["state"] == "MyAction_Chipongang":
             self.handle_self_chipongang(data)
+            if data["operation"] == 2:
+                self.updataForbiden(data)
 
             return
 
@@ -367,11 +383,7 @@ class TileManager:
             # self.discards[self.Myseat].append(data["tile"])
             self.hands.append(data["getTile"])
 
-
-
             self.count_tingpaiList()
-
-
 
             return
 
@@ -402,6 +414,13 @@ class TileManager:
             return
         return
 
+    def updataForbiden(self,data):
+        for i in self.current_operationList:
+            if i["type"] == 2:
+                for j in i["combination"]:
+                    for k in j.split("|"):
+                        self.forbiden.append(k)
+        return
     def LiqiJudge(self):
         """ 判断是否可以立直 """
         # 无吃碰杠，且有听牌，且未振听
@@ -433,7 +452,8 @@ class TileManager:
             self.doras = data["doras"]
 
         self.can_chipongang = False
-        self.melds[self.Myseat].append(data["operation"]["combination"])
+        for i in data["operation"]["combination"]:
+            self.melds[self.Myseat].append(i)
 
         return
 

@@ -6,7 +6,7 @@ from bot_manager import BotManager
 from common.settings import Settings
 from game.game_state import GameState
 from trans_to_cn import get_action_prompt
-from prompt_ui import update_ui
+from prompt_ui import update_ui_prompt
 
 GAME_LOG_PATH = "game_log/test.txt"
 REACTION_LOG_PATH = "game_log/reaction_log.txt"
@@ -84,7 +84,7 @@ def process_new_liqi_msgs():
                         prompt = get_action_prompt(reaction)  # **获取行动提示**
                         print(f"行动提示: {prompt}")
 
-                        update_ui(prompt)  # **实时更新 UI**
+                        update_ui_prompt(prompt)  # **实时更新 UI**
 
                         with open(REACTION_LOG_PATH, "a", encoding="utf-8") as out_f:
                             out_f.write(json.dumps(reaction, ensure_ascii=False) + "\n")
@@ -93,6 +93,8 @@ def process_new_liqi_msgs():
 
                 except json.JSONDecodeError as e:
                     print(f"JSON 解析错误: {e}")
+                except Exception as e:
+                    print(f"...")
 
 
 def react_api():

@@ -1,6 +1,6 @@
 import json
 from beta_tileManager import tile_manager
-
+from prompt_ui import update_tile_manager
 global_msg_id = 0
 
 
@@ -153,8 +153,8 @@ def convert_image_data(image_data):
     """
     根据图像识别数据转换为标准 LiqiMsg。
     """
+    # update_tile_manager(tile_manager.hands, tile_manager.melds[tile_manager.Myseat], tile_manager.discards[tile_manager.Myseat])
 
-    tile_manager.handle_discard(image_data)
     state = image_data["state"]
     msgs = []
 
@@ -170,6 +170,7 @@ def convert_image_data(image_data):
         res_messages = generate_liqi_msg("MsgType.RES", ".lq.FastTest.inputChiPengGang", {}, id=res_id)
         msgs.extend([req_messages, res_messages])
 
+    tile_manager.handle_discard(image_data)
     step = tile_manager.step
 
     if state == "GameStart":
@@ -486,7 +487,7 @@ def convert_image_data(image_data):
                         "seat": tile_manager.Myseat,
                         "operationList": operationList,
                         "timeAdd": 20000,
-                        "timeFixed": 5000
+                        "timeFixed": 5000,
                     },
                     "moqie": False,
                     "isLiqi": False,
@@ -571,47 +572,117 @@ def convert_image_data(image_data):
                 }}, id=-1)
 
         else:
-            req_msg = generate_liqi_msg("MsgType.REQ", ".lq.FastTest.inputChiPengGang", {
-                "type": operation["type"],
-                "timeuse": 1,
-                "cancelOperation": False,
-                "index": 0,
-                "moqie": False,
-                "tileState": 0,
-                "changeTiles": [],
-                "tileStates": [],
-                "gapType": 0
-            })
-
+            if operation["type"] == 2:
+                req_msg = generate_liqi_msg("MsgType.REQ", ".lq.FastTest.inputChiPengGang", {
+                    "type": operation["type"],
+                    "timeuse": 1,
+                    "cancelOperation": False,
+                    "index": 0,
+                    "moqie": False,
+                    "tileState": 0,
+                    "changeTiles": [],
+                    "tileStates": [],
+                    "gapType": 0
+                })
+            else:
+                req_msg = generate_liqi_msg("MsgType.REQ", ".lq.FastTest.inputChiPengGang", {
+                    "type": operation["type"],
+                    "timeuse": 1,
+                    "cancelOperation": False,
+                    "index": 0,
+                })
             res_id = get_next_msg_id() - 1
             res_msg = generate_liqi_msg("MsgType.RES", ".lq.FastTest.inputChiPengGang", {}, id=res_id)
 
-            notify_msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.ActionPrototype", {
-                "step": step,
-                "name": "ActionChiPengGang",
-                "data": {
-                    "tiles": operation["combination"],
-                    "froms": operation["form"],
-                    "operation": {
-                        "operationList": [{
-                        "type": 1,
-                        "combination": operation["tile_list"],
-                        "changeTiles": [],
-                        "changeTileStates": [],
-                        "gapType": 0}],
-                     "timeAdd": 20000,
-                     "timeFixed": 5000,
-                     "seat": seat},
-                 "tileStates": [0, 0],
-                 "seat": seat,
-                 "type": 0,
-                 "zhenting": tile_manager.get("zhenting", False),
-                 "tingpais": tile_manager.get("tingpai", []),
-                 "scores": [],
-                 "liqibang": 0 }}, id=-1)
+            operationCopy = operation["combination"].copy()
+            tileStates = [0, 0]
 
-        tile_manager.step = step + 1
-        msgs.extend([req_msg, res_msg, notify_msg])
+            if operation["type"] == 5:
+                tileStates = [0, 0, 0]
+            if operation["type"] == 2:
+                notify_msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.ActionPrototype", {
+                    "step": step,
+                    "name": "ActionChiPengGang",
+                    "data": {
+                        "tiles": operationCopy,
+                        "froms": operation["form"],
+                        "operation": {
+                            "operationList": [{
+                            "type": 1,
+                            "combination": tile_manager.lastChi,
+                            "changeTiles": [],
+                            "changeTileStates": [],
+                            "gapType": 0}],
+                         "timeAdd": 20000,
+                         "timeFixed": 5000,
+                         "seat": seat},
+                     "tileStates": tileStates,
+                     "seat": seat,
+                     "type": 0,
+                     "zhenting": False,
+                     "tingpais": tile_manager.tingpai,
+                     "scores": [],
+                     "liqibang": 0 }}, id=-1)
+            else:
+                notify_msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.ActionPrototype", {
+                    "step": step,
+                    "name": "ActionChiPengGang",
+                    "data": {
+                        "seat": seat,
+                        "type": 1,
+                        "tiles": operation["combination"],
+                        "froms": operation["form"],
+                        "operation": {
+                            "seat": seat,
+                            "operationList": [{
+                                "type": operation["type"]-2,
+                                "combination": [operation["combination"][0]],
+                                "changeTiles": [],
+                                "changeTileStates": [],
+                                "gapType": 0}],
+                            "timeAdd": 20000,
+                            "timeFixed": 5000},
+                        "tileStates": tileStates,
+                        "zhenting": False,
+                        "tingpais": tile_manager.tingpai, "scores": [], "liqibang": 0}}, id=-1)
+
+
+        op_req_msg = generate_liqi_msg("MsgType.REQ", ".lq.FastTest.inputOperation", {
+        "type": 1,
+        "tile": image_data["tile"],
+        "timeuse": 4,
+        "index": 0,
+        "cancelOperation": False,
+        "moqie": False,
+        "tileState": 0,
+        "changeTiles": [],
+        "tileStates": [],
+        "gapType": 0})
+
+        confirm_req_id = get_next_msg_id() - 1
+        op_res_msg = generate_liqi_msg("MsgType.RES", ".lq.FastTest.inputOperation", {}, id=confirm_req_id)
+
+        discard_msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.ActionPrototype", {
+        "step": step+1,
+        "name": "ActionDiscardTile",
+        "data": {
+            "tile": image_data["tile"],
+            "seat": seat,
+            "isLiqi": False,
+            "moqie": False,
+            "zhenting": False,
+            "tingpais": [],
+            "doras": [],
+            "isWliqi": False,
+            "tileState": 0,
+            "revealed": False,
+            "scores": [],
+            "liqibang": 0}}, id=-1)
+
+        tile_manager.step = step + 2
+        tile_manager.lastChi = []
+        tile_manager.forbiden = []
+        msgs.extend([req_msg, res_msg, notify_msg, op_req_msg, op_res_msg, discard_msg])
         return msgs
 
     elif state == "MyAction_liqi":
@@ -689,8 +760,8 @@ def convert_image_data(image_data):
             "name": "ActionChiPengGang",
             "data": {
                 "seat": seat,
-                "tiles": operation.get("combination", []),
-                "froms": operation.get("form", []),
+                "tiles": operation["combination"],
+                "froms": operation["form"],
                 "tileStates": tileStates,
                 "type": operation["type"]-2 ,
                 "zhenting": False,

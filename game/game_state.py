@@ -7,7 +7,7 @@ import json
 
 from liqi import MsgType
 from liqi import LiqiProto, LiqiMethod, LiqiAction
-
+from prompt_ui import update_tile_manager
 import common.mj_helper as mj_helper
 from common.mj_helper import MjaiType, GameInfo, MJAI_WINDS, ChiPengGang, MSGangType
 from common.log_helper import LOGGER
@@ -437,7 +437,7 @@ class GameState:
                 # print(f"mjai:{tile_mjai}")
 
                 self.kyoku_state.my_tehai.remove(tile_mjai)
-
+                update_tile_manager(self.kyoku_state.my_tehai)
                 # print(f"after-mytenhai: {self.kyoku_state.my_tehai}")
 
                 self.kyoku_state.my_tehai = mj_helper.sort_mjai_tiles(self.kyoku_state.my_tehai)
@@ -484,7 +484,11 @@ class GameState:
                     consumed_mjai.append(mj_helper.cvt_ms2mjai(liqi_data_data['tiles'][idx]))
             if actor == self.seat:  # update my hand info
                 for c in consumed_mjai:
+
                     self.kyoku_state.my_tehai.remove(c)
+
+
+
                 self.kyoku_state.my_tehai = mj_helper.sort_mjai_tiles(self.kyoku_state.my_tehai)
 
             assert target != actor
@@ -563,6 +567,8 @@ class GameState:
                         self.kyoku_state.my_tsumohai = None
                         self.kyoku_state.my_tehai.remove(tile_mjai)
                         self.kyoku_state.my_tehai = mj_helper.sort_mjai_tiles(self.kyoku_state.my_tehai)
+
+
 
                     self.mjai_pending_input_msgs.append(
                         {
