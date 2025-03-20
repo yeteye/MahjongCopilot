@@ -1,6 +1,10 @@
 ## Main_program
 __链接__: https://github.com/Zeiwoos/SoulPlay?tab=readme-ov-file
 
+## team
+__我不是牌佬__
+__#SoulPlayAI__
+
 ## log
 
 null
