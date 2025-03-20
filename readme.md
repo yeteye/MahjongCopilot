@@ -13,7 +13,7 @@ null
 
 ___记得放入模型___
 
-___识别部分的requirements.txt___
+___识别部分的requirements.txt需额外安装___
 
 ## env
 
