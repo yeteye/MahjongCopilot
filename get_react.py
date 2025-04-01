@@ -5,7 +5,7 @@ import threading
 from bot_manager import BotManager
 from common.settings import Settings
 from game.game_state import GameState
-from trans_to_cn import get_action_prompt
+from trans_to_cn import get_action_prompt, translate_reaction
 from prompt_ui import update_ui_prompt
 
 GAME_LOG_PATH = "game_log/test.txt"
@@ -81,7 +81,8 @@ def process_new_liqi_msgs():
                     reaction = _manager.my_api(liqi_msg)
                     # print("right")
                     if reaction:
-                        prompt = get_action_prompt(reaction)  # **获取行动提示**
+                        # prompt = get_action_prompt(reaction)  # **获取行动提示**
+                        prompt = translate_reaction(reaction)  # **获取行动提示**
                         print(f"行动提示: {prompt}")
 
                         update_ui_prompt(prompt)  # **实时更新 UI**

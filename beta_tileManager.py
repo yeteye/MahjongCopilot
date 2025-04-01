@@ -229,7 +229,7 @@ class TileManager:
             return "5" + tile[1:]
         return tile
 
-    def get_possible_actions(self, tile):
+    def get_possible_actions(self, tile, seat):
         """
         检测吃、碰、杠操作，返回所有可能的操作（不进行选择）。
         吃操作仅适用于数字牌（m, p, s）。
@@ -258,62 +258,64 @@ class TileManager:
                 "combination": [f"{effective_tile}|{effective_tile}|{effective_tile}"]
             })
 
-        # 吃：仅适用于数字牌（m, p, s）
-        if len(effective_tile) > 1 and (effective_tile[1] in "mps"):
-            try:
-                num = int(effective_tile[0])
-            except ValueError:
-                num = 0
-            suit = effective_tile[1]
-            chi_combinations = [
-                {f"{num-2}{suit}", f"{num-1}{suit}"},
-                {f"{num-1}{suit}", f"{num+1}{suit}"},
-                {f"{num+1}{suit}", f"{num+2}{suit}"}
-            ]
-            hand_copy = self.hands.copy()
-            for i in self.melds[self.Myseat]:
-                print("i ",i)
-                hand_copy.remove(i)
-            print("hand_copy ",hand_copy)
+        if seat == self.Myseat - 1 or (seat==3 and self.Myseat==0):
+            # 吃：仅适用于数字牌（m, p, s）
+            if len(effective_tile) > 1 and (effective_tile[1] in "mps"):
+                try:
+                    num = int(effective_tile[0])
+                except ValueError:
+                    num = 0
+                suit = effective_tile[1]
+                chi_combinations = [
+                    {f"{num-2}{suit}", f"{num-1}{suit}"},
+                    {f"{num-1}{suit}", f"{num+1}{suit}"},
+                    {f"{num+1}{suit}", f"{num+2}{suit}"}
+                ]
+                hand_copy = self.hands.copy()
+                for i in self.melds[self.Myseat]:
+                    print("i ",i)
+                    hand_copy.remove(i)
+                # print("hand_copy ",hand_copy)
 
-            chi = []
-            for chi_set in chi_combinations:
-                if chi_set.issubset(set(hand_copy)):  # 确保 chi_set 在手牌中
-                    chi.append(list(chi_set)[0])
-                    chi.append(list(chi_set)[1])
-            print("chi ",chi)
+                chi = []
+                for chi_set in chi_combinations:
+                    if chi_set.issubset(set(hand_copy)):  # 确保 chi_set 在手牌中
+                        chi.append(list(chi_set)[0])
+                        chi.append(list(chi_set)[1])
+                # print("chi ",chi)
 
-            if len(chi) == 2:
-                actions.append({
-                    "type": 2,  # 2 表示吃
-                    "changeTiles": [],
-                    "changeTileStates": [],
-                    "gapType": 0,
-                    "combination": [f"{chi[0]}|{chi[1]}"]
-                })
-                self.lastChi.append(effective_tile)
-            elif len(chi) == 4:
-                actions.append({
-                    "type": 2,  # 2 表示吃
-                    "changeTiles": [],
-                    "changeTileStates": [],
-                    "gapType": 0,
-                    "combination": [f"{chi[0]}|{chi[1]}", f"{chi[2]}|{chi[3]}"]
-                })
-                self.lastChi.append(effective_tile)
-            elif len(chi) == 6:
-                actions.append({
-                    "type": 2,  # 2 表示吃
-                    "changeTiles": [],
-                    "changeTileStates": [],
-                    "gapType": 0,
-                    "combination": [
-                        f"{chi[0]}|{chi[1]}",
-                        f"{chi[2]}|{chi[3]}",
-                        f"{chi[4]}|{chi[5]}"
-                    ]
-                })
-                self.lastChi.append(effective_tile)
+                if len(chi) == 2:
+                    actions.append({
+                        "type": 2,  # 2 表示吃
+                        "changeTiles": [],
+                        "changeTileStates": [],
+                        "gapType": 0,
+                        "combination": [f"{chi[0]}|{chi[1]}"]
+                    })
+                    #lastChi要在手牌中获取那些临近该组合的
+                    # self.lastChi.append(effective_tile)
+                elif len(chi) == 4:
+                    actions.append({
+                        "type": 2,  # 2 表示吃
+                        "changeTiles": [],
+                        "changeTileStates": [],
+                        "gapType": 0,
+                        "combination": [f"{chi[0]}|{chi[1]}", f"{chi[2]}|{chi[3]}"]
+                    })
+                    # self.lastChi.append(effective_tile)
+                elif len(chi) == 6:
+                    actions.append({
+                        "type": 2,  # 2 表示吃
+                        "changeTiles": [],
+                        "changeTileStates": [],
+                        "gapType": 0,
+                        "combination": [
+                            f"{chi[0]}|{chi[1]}",
+                            f"{chi[2]}|{chi[3]}",
+                            f"{chi[4]}|{chi[5]}"
+                        ]
+                    })
+                    # self.lastChi.append(effective_tile)
 
         # 将检测到的操作更新到当前操作列表中
         if len(actions)>0:
@@ -328,6 +330,8 @@ class TileManager:
 
         self.current_operationList = []
         # self.can_chipongang = False
+        if data["doras"] :
+            self.doras=data["doras"]
 
         if data["state"] in ["GameStart", "GameEnd", "Other_cancel"]:
             return
@@ -343,7 +347,7 @@ class TileManager:
 
             self.discards[seat].append(tile)
 
-            self.get_possible_actions(tile)
+            self.get_possible_actions(tile,seat)
 
             return
 
@@ -393,7 +397,7 @@ class TileManager:
             tile = data["tile"]
             operation = data.get("operation", {})
 
-            self.get_possible_actions(tile)
+            self.get_possible_actions(tile,seat)
             self.discards[seat].append(tile)
             self.can_chipongang = False
 
@@ -409,7 +413,7 @@ class TileManager:
             seat = data["seat"]
             tile = data["tile"]
             self.discards[seat].append(tile)
-            self.get_possible_actions(tile)
+            self.get_possible_actions(tile,seat)
             self.declare_liqi(data["seat"])
             return
         return
