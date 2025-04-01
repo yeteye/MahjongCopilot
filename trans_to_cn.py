@@ -91,7 +91,30 @@ def translate_reaction(reaction: dict):
     elif rtype == 'chi_high':
         return "吃-高"
     elif rtype == 'chi':
-        return "吃"
+        tiles=[]
+        tiles.append(reaction.get("pai"))
+        tiles.extend(reaction.get("consumed"))
+        meta_options = reaction.get("meta_options", [])
+
+        converted_list = []
+        for i in tiles:
+            converted_list.append(convert_hand_to_unicode(i))
+        # 提取前三种选项
+        top_options = meta_options[:3]
+        opts = []
+        for op in top_options:
+            tile_option, prob = op
+            if tile_option == "chi_mid":
+                opts.append(f"吃中：{int(prob * 100)}%")
+            elif tile_option == "chi_high":
+                opts.append(f"吃高：{int(prob * 100)}%")
+            elif tile_option == "chi_low":
+                opts.append(f"吃低：{int(prob * 100)}%")
+            else:
+                opts.append(f"不吃：{int(prob * 100)}%")
+        options_text = "\n".join(opts)
+
+        return f"建议行动：吃{tile_to_chinese(tiles[0])}{converted_list[0]} {tile_to_chinese(tiles[1])}{converted_list[1]} {tile_to_chinese(tiles[2])}{converted_list[2]}。\n{options_text}"
     elif rtype == 'daiminkan':
         return "大明杠"
     elif rtype == "none":
@@ -104,14 +127,34 @@ def translate_reaction(reaction: dict):
         opts = []
         for op in meta_options:
             tile_option, prob = op
-            tile_option_cn = tile_to_chinese(tile_option)
-            opts.append(f"{tile_option_cn}(概率 {prob:.4f})")
-        options_text = "；".join(opts)
-        description = (f"【无动作】当前向听数为 {shanten}，模型评估耗时 {eval_time} 纳秒，{greedy_text}。"
-                       f" 候选操作：{options_text}。")
+            if tile_option == "chi_mid":
+                opts.append(f"吃中：{int(prob * 100)}%")
+            elif tile_option == "chi_high":
+                opts.append(f"吃高：{int(prob * 100)}%")
+            elif tile_option == "chi_low":
+                opts.append(f"吃低：{int(prob * 100)}%")
+            elif tile_option == "reach":
+                opts.append(f"立直：{int(prob * 100)}%")
+            elif tile_option == "pon":
+                opts.append(f"碰：{int(prob * 100)}%")
+            elif tile_option == "daiminkan":
+                opts.append(f"大明杠：{int(prob * 100)}%")
+            elif tile_option == "ankan":
+                opts.append(f"暗杠：{int(prob * 100)}%")
+            elif tile_option == "kakan":
+                opts.append(f"加杠：{int(prob * 100)}%")
+            elif tile_option == "none":
+                opts.append(f"取消：{int(prob * 100)}%")
+            else:
+                tile_option_cn = tile_to_chinese(tile_option)
+                opts.append(f"{tile_option_cn} {int(prob * 100)}%")
+        options_text = "\n".join(opts)
+        description = (f"建议不采取行动："
+                       # f"\n当前向听数为 {shanten}"
+                       f"\n{options_text}。")
         return description
     else:
-        return reaction
+        # return reaction
         return "未知的动作类型"
 
 

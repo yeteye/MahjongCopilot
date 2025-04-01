@@ -546,6 +546,11 @@ def convert_image_data(image_data):
         seat = tile_manager.Myseat
         operation = image_data["operation"]
 
+        froms = []
+        index = operation["combination"].index(tile_manager.lastTile)
+        for i in range(len(operation["combination"])):
+            froms.append(tile_manager.currentPlayer)
+        froms[index] = tile_manager.lastPlayer
 
         if operation["type"] in [4,6]:   #暗杠加杠需要不同处理
             req_msg = generate_liqi_msg("MsgType.REQ", ".lq.FastTest.inputOperation", {
@@ -599,6 +604,7 @@ def convert_image_data(image_data):
             tile_manager.lastChi = set()
 
 
+
             if operation["type"] == 5:
                 tileStates = [0, 0, 0]
             if operation["type"] == 2:
@@ -631,7 +637,7 @@ def convert_image_data(image_data):
                     "name": "ActionChiPengGang",
                     "data": {
                         "tiles": operationCopy,
-                        "froms": operation["form"],
+                        "froms": froms,
                         "operation": {
                             "operationList": [{
                             "type": 1,
@@ -657,7 +663,7 @@ def convert_image_data(image_data):
                         "seat": seat,
                         "type": 1,
                         "tiles": operation["combination"],
-                        "froms": operation["form"],
+                        "froms": froms,
                         "operation": {
                             "seat": seat,
                             "operationList": [{
@@ -778,6 +784,12 @@ def convert_image_data(image_data):
 
         tileStates = [0, 0]
 
+        froms = []
+        index = operation["combination"].index(tile_manager.lastTile)
+        for i in range(len(operation["combination"])):
+            froms.append(tile_manager.currentPlayer)
+        froms[index] = tile_manager.lastPlayer
+
         if operation["type"] in [4,6]:   #暗杠加杠需要不同处理
             tile_manager.leftTileCount = tile_manager.leftTileCount - 1
             deal_msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.ActionPrototype", {
@@ -837,7 +849,7 @@ def convert_image_data(image_data):
                     "seat": seat,
                     "type": 2,
                     "tiles": operation["combination"],
-                    "froms": operation["form"],
+                    "froms": froms,
                     "tileStates": [0, 0, 0],
                     "zhenting": False,
                     "tingpais": [],
@@ -894,7 +906,7 @@ def convert_image_data(image_data):
                         "moqie": False,
                         "zhenting": False,
                         "tingpais": [],
-                        "doras": ["7m", "7p"],
+                        "doras": tile_manager.doras,
                         "isWliqi": False,
                         "tileState": 0,
                         "revealed": False,
@@ -912,7 +924,7 @@ def convert_image_data(image_data):
                 "data": {
                     "seat": seat,
                     "tiles": operation["combination"],
-                    "froms": operation["form"],
+                    "froms": froms,
                     "tileStates": tileStates,
                     "type": operation["type"]-2 ,#吃0碰1
                     "zhenting": False,
@@ -1046,6 +1058,7 @@ def convert_image_data(image_data):
         return msgs
 
     elif state == "GameEnd":
+        print(tile_manager.hands)
         tile_manager.end_game()
         msg = generate_liqi_msg("MsgType.NOTIFY", ".lq.NotifyGameEndResult", {
             "step": -1,

@@ -18,6 +18,12 @@ class TileManager:
 
         self.can_chipongang = False  # 存储待处理的吃/碰/杠操作
 
+        self.lastPlayer = 0
+        self.currentPlayer = 0
+
+        self.lastTile = "1m"
+        self.currentTile = "1m"
+
         self.forbiden = []
         self.is_liqi = False          # 我方是否立直
         self.justLiqi = False       # 是否刚刚立直
@@ -48,6 +54,12 @@ class TileManager:
         self.doras = data["doras"]
         self.melds = {i: [] for i in range(4)}
         self.discards = {i: [] for i in range(4)}
+
+        self.lastPlayer = 0
+        self.currentPlayer = 0
+
+        self.lastTile = "1m"
+        self.currentTile = data.get("tile", "1m")
 
         self.lastChi = []
         self.forbiden = []
@@ -165,8 +177,8 @@ class TileManager:
 
         self.tingpai = []  # 重新初始化听牌列表
         hand_copy = self.hands.copy()
-        for meld in self.melds[self.Myseat]:
-            hand_copy.remove(meld)
+        # for meld in self.melds[self.Myseat]:
+        #     hand_copy.remove(meld)
 
         for i in hand_copy:
               # 复制手牌
@@ -266,23 +278,40 @@ class TileManager:
                 except ValueError:
                     num = 0
                 suit = effective_tile[1]
-                chi_combinations = [
-                    {f"{num-2}{suit}", f"{num-1}{suit}"},
-                    {f"{num-1}{suit}", f"{num+1}{suit}"},
-                    {f"{num+1}{suit}", f"{num+2}{suit}"}
-                ]
+                #0m等宝牌未考虑?0m在组合中是以5m代替显示的吗？
+                if effective_tile[0] == "1" :
+                    chi_combinations = [
+                        {f"{num+1}{suit}", f"{num+2}{suit}"}
+                    ]
+                elif effective_tile[0] == "2" :
+                    chi_combinations = [
+                        {f"{num-1}{suit}", f"{num+1}{suit}"},
+                        {f"{num+1}{suit}", f"{num+2}{suit}"}
+                    ]
+                else:
+                    chi_combinations = [
+                        {f"{num-2}{suit}", f"{num-1}{suit}"},
+                        {f"{num-1}{suit}", f"{num+1}{suit}"},
+                        {f"{num+1}{suit}", f"{num+2}{suit}"}
+                    ]
                 hand_copy = self.hands.copy()
-                for i in self.melds[self.Myseat]:
-                    print("i ",i)
-                    hand_copy.remove(i)
+                # for i in self.melds[self.Myseat]:
+                #     print("i ",i)
+                #     hand_copy.remove(i)
                 # print("hand_copy ",hand_copy)
+                doras = []
+                for index, _ in enumerate(hand_copy) :
+                    hand_copy.remove(_)
+                    hand_copy.append(self.get_effective_tile(_))
+                    if _ != self.get_effective_tile(_):
+                        doras.append(_)
 
+                self.myDoras=doras
                 chi = []
                 for chi_set in chi_combinations:
                     if chi_set.issubset(set(hand_copy)):  # 确保 chi_set 在手牌中
                         chi.append(list(chi_set)[0])
                         chi.append(list(chi_set)[1])
-                # print("chi ",chi)
 
                 if len(chi) == 2:
                     actions.append({
@@ -328,10 +357,17 @@ class TileManager:
 
     def handle_discard(self, data):
 
+        self.lastPlayer = self.currentPlayer
+        self.currentPlayer = data.get("seat", self.Myseat)
+
+        self.lastTile = self.currentTile
+        self.currentTile = data.get("tile", "1m")
+
         self.current_operationList = []
         # self.can_chipongang = False
-        if data["doras"] :
-            self.doras=data["doras"]
+        doras = data.get("doras", [])
+        if doras:
+            self.doras = doras
 
         if data["state"] in ["GameStart", "GameEnd", "Other_cancel"]:
             return
@@ -376,6 +412,7 @@ class TileManager:
 
         elif data["state"] == "MyAction_Chipongang":
             self.handle_self_chipongang(data)
+            self.hands.remove(data["tile"])
             if data["operation"] == 2:
                 self.updataForbiden(data)
 
@@ -452,12 +489,15 @@ class TileManager:
         self.can_liqi = self.LiqiJudge()
 
     def handle_self_chipongang(self, data):
-        if data["operation"]["type"] in [4 , 5, 6]:
-            self.doras = data["doras"]
+        # if data["operation"]["type"] in [4 , 5, 6]:
+        #     self.doras = data["doras"]
 
         self.can_chipongang = False
+        self.hands.append(self.lastTile)
         for i in data["operation"]["combination"]:
             self.melds[self.Myseat].append(i)
+
+            self.hands.remove(i)
 
         return
 

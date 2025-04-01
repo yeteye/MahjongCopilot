@@ -36,30 +36,27 @@ image_data_list2 = [
     {"state": "MyAction_Chipongang", "doras": ["7m"], "tile": "2p", "operation": {
         "type": 3,
         "combination": ["7m", "7m", "7m"],
-        "form": [0, 1, 1],
     }},
     {"state": "Discard",  "seat": 2, "tile": "9p"},
     {"state": "Discard",  "seat": 3, "tile": "1s"},
 
     {"state": "Discard",  "seat": 0, "tile": "8m"},
-    {"state": "MyAction",  "getTile": "5m", "tile": "5m"},
+    {"state": "MyAction",  "getTile": "1m", "tile": "5m"},
     {
         "state":"Other_Chipongang",
         "seat":3,
         "tile": "3s",
-        "doras":["7m","4s"],
+        "doras":["7m"],
         "operation":{
-            "type": 2,
-            "combination":["3m","3m","5m"],
-            "form":[3,3,1],
+            "type": 3,
+            "combination":["5m","5m","5m"],
         }
     },
 
-    {"state": "Discard",  "seat": 0, "tile": "6m"},
+    {"state": "Discard",  "seat": 0, "tile": "2m"},
     {"state": "MyAction_Chipongang","doras": ["7m"], "tile":"7s" ,"operation": {
         "type": 2,
-        "combination": ["5m", "6m", "7m"],
-        "form": [1, 0, 1],
+        "combination": ["2m", "3m", "4m"],
     }},
      {"state": "GameEnd"}
     ]

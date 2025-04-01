@@ -87,10 +87,10 @@ def process_new_liqi_msgs():
 
                         update_ui_prompt(prompt)  # **实时更新 UI**
 
-                        with open(REACTION_LOG_PATH, "a", encoding="utf-8") as out_f:
-                            out_f.write(json.dumps(reaction, ensure_ascii=False) + "\n")
-                            out_f.write(f"行动提示: {prompt}\n")
-                            out_f.write("=" * 50 + "\n")
+                        # with open(REACTION_LOG_PATH, "a", encoding="utf-8") as out_f:
+                        #     out_f.write(json.dumps(reaction, ensure_ascii=False) + "\n")
+                        #     out_f.write(f"行动提示: {prompt}\n")
+                        #     out_f.write("=" * 50 + "\n")
 
                 except json.JSONDecodeError as e:
                     print(f"JSON 解析错误: {e}")
