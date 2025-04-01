@@ -211,6 +211,13 @@ class PromptUI:
             command=self.open_log
         )
 
+        # 日志按钮
+        settings_btn = self.toolbar.add_button(
+            text="设置",
+            img_file="resources/settings.png",  # 替换为实际的图标文件路径
+            command=self.model_settings
+        )
+
         # 添加分隔符
         self.toolbar.add_sep()
 
@@ -227,12 +234,24 @@ class PromptUI:
 
     def show_help(self):
         """显示帮助信息"""
-        help_text = "麻将辅助系统使用指南\n\n1. 点击“项目仓库”按钮可以访问项目的GitHub页面。\n2. 点击“帮助”按钮可以查看使用指南。\n3. 点击“日志”按钮可以查看系统日志。"
+        help_text = ("麻将辅助系统使用指南\n\n"
+                     "1. 点击“项目仓库”按钮可以访问项目的GitHub页面。"
+                     "\n2. 点击“帮助”按钮可以查看使用指南。"
+                     "\n3. 点击“日志”按钮可以查看系统日志。")
         messagebox.showinfo("帮助", help_text)
+
+    def model_settings(self):
+        """打开文件夹model设置pth路径（修改setting.json中的"model_file"参数）"""
+        log_text = ("模型更换"
+                    "\n即将上线"
+                    )
+        messagebox.showinfo("设置", log_text)
 
     def open_log(self):
         """打开日志文件"""
-        log_text = "系统日志\n\n- 系统启动: 2024-03-31 19:02:32\n- 模型加载完成: 2024-03-31 19:02:35\n- 开始监听游戏日志: 2024-03-31 19:02:38"
+        log_text = ("系统日志"
+                    "\n开发中，敬请期待"
+                    )
         messagebox.showinfo("日志", log_text)
 
     def start_listening(self):
