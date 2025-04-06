@@ -68,34 +68,35 @@ def process_new_liqi_msgs():
                 try:
                     liqi_msg = json.loads(json_str, object_hook=liqi_object_hook)
 
-                    # print("now processing: ",liqi_msg)
-                    method = liqi_msg.get("method", "")
+                        # print("now processing: ",liqi_msg)
+                        # method = liqi_msg.get("method", "")
+                        #
+                        # if any(end_signal in method for end_signal in END_GAME_SIGNALS):
+                        #     print("游戏结束")
+                        #     # with open(GAME_LOG_PATH, "w", encoding="utf-8") as new_log:
+                        #     #     new_log.truncate(0)  # **清空文件**
+                        #     continue
 
-                    if any(end_signal in method for end_signal in END_GAME_SIGNALS):
-                        print("游戏结束")
-                        # with open(GAME_LOG_PATH, "w", encoding="utf-8") as new_log:
-                        #     new_log.truncate(0)  # **清空文件**
-                        continue
-
-                    # print("now processing: ",liqi_msg)
+                        # print("now processing: ",liqi_msg)
+                    # print("DEBUG: liqi_msg =", liqi_msg)
                     reaction = _manager.my_api(liqi_msg)
-                    # print("right")
+                        # print("right")
                     if reaction:
-                        # prompt = get_action_prompt(reaction)  # **获取行动提示**
+                    # prompt = get_action_prompt(reaction)  # **获取行动提示**
                         prompt = translate_reaction(reaction)  # **获取行动提示**
                         print(f"行动提示: {prompt}")
 
                         update_ui_prompt(prompt)  # **实时更新 UI**
-
-                        # with open(REACTION_LOG_PATH, "a", encoding="utf-8") as out_f:
-                        #     out_f.write(json.dumps(reaction, ensure_ascii=False) + "\n")
-                        #     out_f.write(f"行动提示: {prompt}\n")
-                        #     out_f.write("=" * 50 + "\n")
+                            # with open(REACTION_LOG_PATH, "a", encoding="utf-8") as out_f:
+                            #     out_f.write(json.dumps(reaction, ensure_ascii=False) + "\n")
+                            #     out_f.write(f"行动提示: {prompt}\n")
+                            #     out_f.write("=" * 50 + "\n")
 
                 except json.JSONDecodeError as e:
                     print(f"JSON 解析错误: {e}")
                 except Exception as e:
-                    print(f"...")
+                    print("waiting...")
+                    # print(f"处理消息时发生错误: {e}")
 
 
 def react_api():

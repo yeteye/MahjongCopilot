@@ -90,10 +90,17 @@ def process_new_liqi_msgs(new_lines,flag):
             try:
                 print("处理消息: ", json_str)
                 raw_msg = json.loads(json_str)  # **解析 JSON**
-                liqi_msg_2=convert_image_data(raw_msg)  
-                with open(WHOLE_GAME_LOG_PATH, "a", encoding="utf-8") as f:
-                    f.write("LiqiMsg: " + json.dumps(liqi_msg_2, ensure_ascii=False) + "\n")
-                    f.write("=" * 50 + "\n")
+                liqi_msg_2=convert_image_data(raw_msg)
+                if isinstance(liqi_msg_2, list):
+                    for liqi_msg in liqi_msg_2:
+                        with open(WHOLE_GAME_LOG_PATH, "a", encoding="utf-8") as f:
+                            f.write("LiqiMsg: " + json.dumps(liqi_msg, ensure_ascii=False) + "\n")
+                            f.write("=" * 50 + "\n")
+                else:  # 如果只返回一个字典
+                    with open(WHOLE_GAME_LOG_PATH, "a", encoding="utf-8") as f:
+                        f.write("LiqiMsg: " + json.dumps(liqi_msg_2, ensure_ascii=False) + "\n")
+                        f.write("=" * 50 + "\n")
+
 
                 time.sleep(DELAY_BETWEEN_MESSAGES)  # **模拟延迟**
 

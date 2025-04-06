@@ -4,7 +4,7 @@ import json
 from beta_generator import convert_image_data
 
 # 输入文件（监听）
-INPUT_FILE = "gamelog/pre.txt"
+INPUT_FILE = "game_log/pre.txt"
 
 # 输出文件（写入转换后的内容）
 OUTPUT_FILE = "game_log/my_simulate_gen_info.txt"
